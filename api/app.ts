@@ -36,6 +36,21 @@ app.use('/api/books', bookRoutes)
 app.use('/api/platforms', platformRoutes)
 
 /**
+ * Root
+ */
+app.get('/', (req: Request, res: Response) => {
+  res.json({
+    success: true,
+    message: '图书爆款工坊 API 服务运行中',
+    endpoints: {
+      search: '/api/books/search?q=书名',
+      detail: '/api/books/:id',
+      generateNotes: 'POST /api/books/:id/notes',
+    },
+  });
+});
+
+/**
  * health
  */
 app.use(
