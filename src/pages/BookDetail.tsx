@@ -48,6 +48,7 @@ export default function BookDetail() {
   }
 
   const { basicInfo, ratings, sellingPoints, redNotes, platformLinks } = bookDetail;
+  const isTempBook = id?.startsWith('temp_');
 
   return (
     <div className="min-h-screen bg-[#FAF7F2] pb-20">
@@ -65,6 +66,20 @@ export default function BookDetail() {
       </div>
 
       <div className="max-w-5xl mx-auto px-6 mt-8">
+        {/* Temp Book Hint */}
+        {isTempBook && (
+          <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-6 flex items-start gap-3">
+            <div className="text-amber-600 text-xl mt-0.5">💡</div>
+            <div>
+              <div className="font-medium text-amber-800 mb-1">这是一本自定义书籍</div>
+              <div className="text-amber-700 text-sm">
+                未能从本地书库中找到「{basicInfo.title}」的详细信息，系统已根据分类「{basicInfo.category}」智能生成了通用的买点卖点和笔记模板。
+                你仍可从下方平台链接中搜索详细信息。
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Basic Info */}
         <div className="bg-white rounded-3xl shadow-lg overflow-hidden mb-8">
           <div className="p-8 md:p-12 flex flex-col md:flex-row gap-8 md:gap-12">
@@ -88,37 +103,39 @@ export default function BookDetail() {
                 {basicInfo.title}
               </h1>
               <p className="text-xl text-[#1B4332]/60 mb-6" style={{ fontFamily: "'LXGW WenKai', serif" }}>
-                {basicInfo.author}
+                {basicInfo.author || '未知作者'}
               </p>
 
               <div className="grid grid-cols-2 gap-4 mb-8 text-sm">
                 <div>
                   <span className="text-[#1B4332]/50">出版社</span>
-                  <div className="text-[#1B4332] font-medium">{basicInfo.publisher}</div>
+                  <div className="text-[#1B4332] font-medium">{basicInfo.publisher || '未知'}</div>
                 </div>
                 <div>
                   <span className="text-[#1B4332]/50">出版日期</span>
-                  <div className="text-[#1B4332] font-medium">{basicInfo.publishDate}</div>
+                  <div className="text-[#1B4332] font-medium">{basicInfo.publishDate || '未知'}</div>
                 </div>
                 <div>
                   <span className="text-[#1B4332]/50">ISBN</span>
-                  <div className="text-[#1B4332] font-medium">{basicInfo.isbn}</div>
+                  <div className="text-[#1B4332] font-medium">{basicInfo.isbn || '未知'}</div>
                 </div>
                 <div>
                   <span className="text-[#1B4332]/50">页数</span>
-                  <div className="text-[#1B4332] font-medium">{basicInfo.pages} 页</div>
+                  <div className="text-[#1B4332] font-medium">{basicInfo.pages ? `${basicInfo.pages} 页` : '未知'}</div>
                 </div>
               </div>
 
-              <div className="mb-8">
-                <div className="text-[#1B4332]/60 text-sm mb-2">内容简介</div>
-                <p
-                  className="text-[#1B4332]/80 leading-relaxed text-base"
-                  style={{ fontFamily: "'LXGW WenKai', serif" }}
-                >
-                  {basicInfo.summary}
-                </p>
-              </div>
+              {basicInfo.summary && (
+                <div className="mb-8">
+                  <div className="text-[#1B4332]/60 text-sm mb-2">内容简介</div>
+                  <p
+                    className="text-[#1B4332]/80 leading-relaxed text-base"
+                    style={{ fontFamily: "'LXGW WenKai', serif" }}
+                  >
+                    {basicInfo.summary}
+                  </p>
+                </div>
+              )}
 
               <button
                 onClick={handleGenerateNotes}
@@ -257,6 +274,7 @@ export default function BookDetail() {
         </div>
 
         {/* Xiaohongshu Notes */}
+        {redNotes.length > 0 && (
         <div className="mb-8">
           <h2
             className="font-serif text-xl font-semibold text-[#1B4332] mb-4"
@@ -299,6 +317,7 @@ export default function BookDetail() {
             ))}
           </div>
         </div>
+        )}
       </div>
     </div>
   );

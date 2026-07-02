@@ -1,4 +1,4 @@
-import { getBookById } from './bookService.js';
+import { getBookById, createTempBookData } from './bookService.js';
 import cache from './cache.js';
 
 export interface GeneratedNote {
@@ -17,13 +17,49 @@ export function generateNotes(bookId: string): GeneratedNote[] | null {
   const cached = cache.get<GeneratedNote[]>(cacheKey);
   if (cached) return cached;
 
-  const book = getBookById(bookId);
-  if (!book) return null;
+  let book: {
+    title: string;
+    author: string;
+    category: string;
+    buyPoints: string[];
+    sellPoints: string[];
+    painPoints: string[];
+    summary: string;
+  };
+
+  const existingBook = getBookById(bookId);
+  if (existingBook) {
+    book = {
+      title: existingBook.title,
+      author: existingBook.author,
+      category: existingBook.category,
+      buyPoints: existingBook.buyPoints,
+      sellPoints: existingBook.sellPoints,
+      painPoints: existingBook.painPoints,
+      summary: existingBook.summary,
+    };
+  } else if (bookId.startsWith('temp_')) {
+    // 从id解码书名
+    const base64Part = bookId.replace('temp_', '');
+    const title = Buffer.from(base64Part, 'base64').toString('utf-8');
+    const tempData = createTempBookData(bookId, title, '未知作者');
+    book = {
+      title,
+      author: '未知作者',
+      category: tempData.basicInfo.category,
+      buyPoints: tempData.sellingPoints.buyPoints,
+      sellPoints: tempData.sellingPoints.sellPoints,
+      painPoints: tempData.sellingPoints.painPoints,
+      summary: '',
+    };
+  } else {
+    return null;
+  }
 
   const { title, author, category, buyPoints, sellPoints, painPoints, summary } = book;
 
   // 截取摘要前80字
-  const shortSummary = summary.length > 80 ? summary.slice(0, 80) + '...' : summary;
+  const shortSummary = summary && summary.length > 80 ? summary.slice(0, 80) + '...' : summary || '';
 
   // 角度1：痛点共鸣型
   const angle1: GeneratedNote = {
