@@ -51,6 +51,13 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 /**
+ * Root - redirect to frontend
+ */
+app.get('/', (req: Request, res: Response) => {
+  res.redirect('http://localhost:5173')
+})
+
+/**
  * health
  */
 app.use(
