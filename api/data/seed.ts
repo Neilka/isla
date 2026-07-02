@@ -1,511 +1,384 @@
-// 图书种子数据 - 涵盖多品类热门图书
+// 图书种子数据 - 涵盖多品类热门图书 50+本
 export interface SeedBook {
-  id: string;
-  title: string;
-  author: string;
-  cover: string;
-  publisher: string;
-  publishDate: string;
-  isbn: string;
-  pages: number;
-  summary: string;
-  category: string;
-  ratings: {
-    platform: string;
-    platformName: string;
-    score: number;
-    maxScore: number;
-    ratingsCount: number;
-    summary: string;
-  }[];
-  buyPoints: string[];
-  sellPoints: string[];
-  painPoints: string[];
-  redNotes: {
-    id: string;
-    title: string;
-    snippet: string;
-    likes: number;
-    collects: number;
-    url: string;
-    author: string;
-  }[];
-  platformLinks: {
-    platform: string;
-    platformName: string;
-    url: string;
-  }[];
+  id: string; title: string; author: string; cover: string; publisher: string; publishDate: string; isbn: string; pages: number; summary: string; category: string;
+  ratings: { platform: string; platformName: string; score: number; maxScore: number; ratingsCount: number; summary: string; }[];
+  buyPoints: string[]; sellPoints: string[]; painPoints: string[];
+  redNotes: { id: string; title: string; snippet: string; likes: number; collects: number; url: string; author: string; }[];
+  platformLinks: { platform: string; platformName: string; url: string; }[];
+}
+
+function mkBook(id: string, title: string, author: string, cover: string, publisher: string, publishDate: string, isbn: string, pages: number, summary: string, category: string, doubanScore: number, doubanCount: number, buyPoints: string[], sellPoints: string[], painPoints: string[]): SeedBook {
+  return {
+    id, title, author, cover, publisher, publishDate, isbn, pages, summary, category,
+    ratings: [
+      { platform: "douban", platformName: "豆瓣读书", score: doubanScore, maxScore: 10, ratingsCount: doubanCount, summary: "豆瓣热门图书" },
+      { platform: "weread", platformName: "微信读书", score: Math.round(doubanScore * 10), maxScore: 100, ratingsCount: Math.round(doubanCount * 0.6), summary: "微信读书推荐值" },
+      { platform: "jd", platformName: "京东", score: Math.min(9.9, doubanScore + 1.2), maxScore: 10, ratingsCount: Math.round(doubanCount * 0.4), summary: "京东好评率" },
+      { platform: "dangdang", platformName: "当当", score: Math.min(9.9, doubanScore + 1.3), maxScore: 10, ratingsCount: Math.round(doubanCount * 0.5), summary: "当当综合评分" }
+    ],
+    buyPoints, sellPoints, painPoints,
+    redNotes: [
+      { id: id + "_r1", title: `读完《${title}》，太震撼了`, snippet: summary.slice(0, 50) + "...", likes: 35000, collects: 18000, url: `https://www.xiaohongshu.com/explore/${id}_r1`, author: "读书博主" },
+      { id: id + "_r2", title: `《${title}》精华整理，建议收藏`, snippet: `如果只看一本${category}的书，我推荐这本。`, likes: 28000, collects: 22000, url: `https://www.xiaohongshu.com/explore/${id}_r2`, author: "知识整理官" },
+      { id: id + "_r3", title: `后悔没早点读《${title}》`, snippet: `以前觉得${category}的书都很枯燥，这本书彻底改变了我的看法。`, likes: 42000, collects: 25000, url: `https://www.xiaohongshu.com/explore/${id}_r3`, author: "阅读改变人生" }
+    ],
+    platformLinks: [
+      { platform: "douban", platformName: "豆瓣读书", url: `https://search.douban.com/book/subject_search?search_text=${encodeURIComponent(title)}` },
+      { platform: "weread", platformName: "微信读书", url: `https://weread.qq.com/web/search/?keyword=${encodeURIComponent(title)}` },
+      { platform: "jd", platformName: "京东", url: `https://search.jd.com/Search?keyword=${encodeURIComponent(title)}` },
+      { platform: "dangdang", platformName: "当当", url: `https://search.dangdang.com/?key=${encodeURIComponent(title)}` }
+    ]
+  };
 }
 
 export const seedBooks: SeedBook[] = [
-  {
-    id: "1",
-    title: "认知觉醒",
-    author: "周岭",
-    cover: "https://img2.doubanio.com/view/subject/l/public/s33858631.jpg",
-    publisher: "人民邮电出版社",
-    publishDate: "2020-06",
-    isbn: "9787115543424",
-    pages: 304,
-    summary: "为什么我们做事总是急于求成、避难趋易？所谓有耐心，就是要「咬牙坚持、死磕到底」？如何不再用「三分钟热情」和「打鸡血」的方式做事？本书通过「大脑构造、潜意识、元认知」等思维规律，帮助读者真正看清自己；通过「深度学习、关联、反馈」等事物规律，帮助读者洞悉如何真正成事。",
-    category: "个人成长",
-    ratings: [
-      { platform: "douban", platformName: "豆瓣读书", score: 8.1, maxScore: 10, ratingsCount: 18420, summary: "值得反复阅读的自我成长佳作" },
-      { platform: "weread", platformName: "微信读书", score: 87.3, maxScore: 100, ratingsCount: 35600, summary: "推荐值极高，读者好评如潮" },
-      { platform: "jd", platformName: "京东", score: 9.5, maxScore: 10, ratingsCount: 21000, summary: "好评率99%，畅销榜前10" },
-      { platform: "dangdang", platformName: "当当", score: 9.6, maxScore: 10, ratingsCount: 28000, summary: "当当终身五星图书" }
-    ],
-    buyPoints: [
-      "拖延症晚期，想改变却不知从何下手",
-      "明知重要却总被手机和娱乐分散注意力",
-      "努力很久却看不到进步，陷入自我怀疑",
-      "想培养好习惯但总是三分钟热度"
-    ],
-    sellPoints: [
-      "7大底层概念，20个成长关键词，科学拆解认知升级路径",
-      "基于脑科学和心理学，不是鸡汤而是可操作的认知方法论",
-      "豆瓣8.1分，微信读书推荐值87.3%，百万读者验证",
-      "从「元认知」到「自控力」到「专注力」，形成完整成长闭环"
-    ],
-    painPoints: [
-      "每天忙忙碌碌却没有真正的成长",
-      "知道很多道理却依然过不好这一生",
-      "焦虑、迷茫，找不到人生的方向",
-      "想自律但大脑总被即时满足劫持"
-    ],
-    redNotes: [
-      { id: "r1", title: "读完《认知觉醒》，我终于不焦虑了", snippet: "这本书治好了我的精神内耗！原来焦虑不是缺努力，而是缺认知。", likes: 32000, collects: 18500, url: "https://www.xiaohongshu.com/explore/xxx1", author: "读书人小柒" },
-      { id: "r2", title: "30岁以后才明白，自律不是靠意志力", snippet: "《认知觉醒》让我重新理解了大脑的工作方式，原来我们一直用错了方法。", likes: 28000, collects: 15600, url: "https://www.xiaohongshu.com/explore/xxx2", author: "思维导图控" },
-      { id: "r3", title: "被这本书骂醒了！强烈推荐给所有摆烂的人", snippet: "如果只推荐一本自我成长的书，我一定选它。不是鸡汤，是科学。", likes: 45000, collects: 23000, url: "https://www.xiaohongshu.com/explore/xxx3", author: "向上生长的阿欣" }
-    ],
-    platformLinks: [
-      { platform: "douban", platformName: "豆瓣读书", url: "https://book.douban.com/subject/35193035/" },
-      { platform: "weread", platformName: "微信读书", url: "https://weread.qq.com/web/bookDetail/6a732ce0720483e56a7e1e7" },
-      { platform: "jd", platformName: "京东", url: "https://search.jd.com/Search?keyword=认知觉醒" },
-      { platform: "dangdang", platformName: "当当", url: "https://search.dangdang.com/?key=认知觉醒" }
-    ]
-  },
-  {
-    id: "2",
-    title: "被讨厌的勇气",
-    author: "岸见一郎 / 古贺史健",
-    cover: "https://img2.doubanio.com/view/subject/l/public/s28382891.jpg",
-    publisher: "机械工业出版社",
-    publishDate: "2015-03",
-    isbn: "9787111495482",
-    pages: 194,
-    summary: "本书用「青年与哲人」的对话形式，总结了阿德勒心理学的核心思想。阿德勒说：人的烦恼皆源于人际关系。如果这个世界没有人际关系，如果这个宇宙中没有他人只有自己，那么一切烦恼也都将消失。所谓的「自由」，就是被别人讨厌。",
-    category: "心理学",
-    ratings: [
-      { platform: "douban", platformName: "豆瓣读书", score: 8.5, maxScore: 10, ratingsCount: 98700, summary: "豆瓣心理学TOP10，改变无数人的人生观" },
-      { platform: "weread", platformName: "微信读书", score: 89.1, maxScore: 100, ratingsCount: 52000, summary: "推荐值极高，长期霸榜" },
-      { platform: "jd", platformName: "京东", score: 9.7, maxScore: 10, ratingsCount: 35000, summary: "好评率99.5%，心理学类销量冠军" },
-      { platform: "dangdang", platformName: "当当", score: 9.7, maxScore: 10, ratingsCount: 42000, summary: "当当终身五星图书" }
-    ],
-    buyPoints: [
-      "总是太在意别人的看法，活得小心翼翼",
-      "在人际关系中感到疲惫，不知道如何拒绝别人",
-      "缺乏自信，总觉得别人比自己优秀",
-      "想改变自己的生活状态，但缺乏勇气"
-    ],
-    sellPoints: [
-      "阿德勒心理学经典入门，对话体形式轻松易读",
-      "豆瓣8.5分，近10万人评价，口碑炸裂",
-      "「课题分离」概念影响千万人，帮你摆脱人际关系困扰",
-      "蔡康永、曾宝仪、大张伟等多位名人推荐"
-    ],
-    painPoints: [
-      "为什么我总是活在别人的期待里？",
-      "讨好型人格让我筋疲力尽",
-      "原生家庭的阴影如何走出来？",
-      "不敢做自己，怕被讨厌"
-    ],
-    redNotes: [
-      { id: "r4", title: "读完这本书，我终于敢对别人说「不」了", snippet: "「课题分离」这个概念彻底改变了我的人际关系，原来拒绝别人不用愧疚。", likes: 56000, collects: 32000, url: "https://www.xiaohongshu.com/explore/xxx4", author: "清醒的柚子" },
-      { id: "r5", title: "讨好型人格必看！被讨厌的勇气救我命", snippet: "以前总怕别人不喜欢我，现在明白了：自由就是被讨厌。这本书值得全文背诵！", likes: 41000, collects: 25000, url: "https://www.xiaohongshu.com/explore/xxx5", author: "心理成长笔记" },
-      { id: "r6", title: "30岁分手后读这本书，我重生了", snippet: "如果你正经历人生的低谷，请一定看看这本书。它不只讲心理学，更讲如何好好活着。", likes: 35000, collects: 19000, url: "https://www.xiaohongshu.com/explore/xxx6", author: "独处的力量" }
-    ],
-    platformLinks: [
-      { platform: "douban", platformName: "豆瓣读书", url: "https://book.douban.com/subject/26375417/" },
-      { platform: "weread", platformName: "微信读书", url: "https://weread.qq.com/web/bookDetail/8b9329607186e5b38b9c33e" },
-      { platform: "jd", platformName: "京东", url: "https://search.jd.com/Search?keyword=被讨厌的勇气" },
-      { platform: "dangdang", platformName: "当当", url: "https://search.dangdang.com/?key=被讨厌的勇气" }
-    ]
-  },
-  {
-    id: "3",
-    title: "三体",
-    author: "刘慈欣",
-    cover: "https://img2.doubanio.com/view/subject/l/public/s2768378.jpg",
-    publisher: "重庆出版社",
-    publishDate: "2008-01",
-    isbn: "9787536692930",
-    pages: 302,
-    summary: "文化大革命如火如荼进行的同时，军方探寻外星文明的绝秘计划「红岸工程」取得了突破性进展。但在按下发射键的那一刻，历经劫难的叶文洁没有意识到，她彻底改变了人类的命运。地球文明向宇宙发出的第一声啼鸣，以太阳为中心，以光速向宇宙深处飞驰……",
-    category: "科幻小说",
-    ratings: [
-      { platform: "douban", platformName: "豆瓣读书", score: 8.8, maxScore: 10, ratingsCount: 296000, summary: "豆瓣图书TOP250前列，中国科幻巅峰之作" },
-      { platform: "weread", platformName: "微信读书", score: 92.5, maxScore: 100, ratingsCount: 89000, summary: "神作级别推荐值，科幻类断层第一" },
-      { platform: "jd", platformName: "京东", score: 9.8, maxScore: 10, ratingsCount: 58000, summary: "好评率99.8%，常年霸榜" },
-      { platform: "dangdang", platformName: "当当", score: 9.8, maxScore: 10, ratingsCount: 65000, summary: "当当终身五星，科幻类销量冠军" }
-    ],
-    buyPoints: [
-      "想读一部真正震撼人心的科幻作品",
-      "看过《三体》电视剧想深入了解原著",
-      "朋友强烈推荐，被称为「中国科幻天花板」",
-      "想体验「降维打击」级别的想象力冲击"
-    ],
-    sellPoints: [
-      "雨果奖获奖作品，中国科幻文学里程碑",
-      "奥巴马、扎克伯格、雷军等全球名人推荐",
-      "豆瓣8.8分，近30万人评价，科幻类评分最高",
-      "「黑暗森林法则」「降维打击」等概念已融入日常语言"
-    ],
-    painPoints: [
-      "觉得科幻小说太硬核读不懂",
-      "不知道中国也有世界级的科幻作品",
-      "每天被琐事占据，想体验一次思维的宇宙漫游",
-      "对宇宙和人类命运充满好奇但找不到入口"
-    ],
-    redNotes: [
-      { id: "r7", title: "读完《三体》，我整个人都不好了", snippet: "看完三体我瘫在沙发上整整一个小时，刘慈欣的想象力已经超出了人类的范畴。", likes: 78000, collects: 42000, url: "https://www.xiaohongshu.com/explore/xxx7", author: "科幻迷小K" },
-      { id: "r8", title: "女生也能读懂的《三体》！按这个顺序读不劝退", snippet: "很多人说三体难读，其实掌握正确方法一点都不难！附阅读顺序和背景知识。", likes: 52000, collects: 38000, url: "https://www.xiaohongshu.com/explore/xxx8", author: "喵喵读书" },
-      { id: "r9", title: "《三体》中那些让人头皮发麻的句子", snippet: "「给岁月以文明，而不是给文明以岁月」，每一句都想刻在DNA里。", likes: 64000, collects: 35000, url: "https://www.xiaohongshu.com/explore/xxx9", author: "金句收藏家" }
-    ],
-    platformLinks: [
-      { platform: "douban", platformName: "豆瓣读书", url: "https://book.douban.com/subject/2567698/" },
-      { platform: "weread", platformName: "微信读书", url: "https://weread.qq.com/web/bookDetail/ce032b305a9bc1ce0b0dd2a" },
-      { platform: "jd", platformName: "京东", url: "https://search.jd.com/Search?keyword=三体" },
-      { platform: "dangdang", platformName: "当当", url: "https://search.dangdang.com/?key=三体" }
-    ]
-  },
-  {
-    id: "4",
-    title: "非暴力沟通",
-    author: "马歇尔·卢森堡",
-    cover: "https://img2.doubanio.com/view/subject/l/public/s33793425.jpg",
-    publisher: "华夏出版社",
-    publishDate: "2009-01",
-    isbn: "9787508039008",
-    pages: 190,
-    summary: "著名的马歇尔·卢森堡博士发现了一种沟通方式，依照它来谈话和聆听，能使人们情意相通，和谐相处，这就是「非暴力沟通」。本书将帮助你学会如何表达自己、倾听他人，化解人际冲突，建立高品质的连接。",
-    category: "沟通人际",
-    ratings: [
-      { platform: "douban", platformName: "豆瓣读书", score: 8.4, maxScore: 10, ratingsCount: 76400, summary: "豆瓣沟通类TOP1，经典不衰" },
-      { platform: "weread", platformName: "微信读书", score: 88.2, maxScore: 100, ratingsCount: 48000, summary: "推荐值极高，职场人必读" },
-      { platform: "jd", platformName: "京东", score: 9.6, maxScore: 10, ratingsCount: 31000, summary: "好评率99.3%，沟通类销量冠军" },
-      { platform: "dangdang", platformName: "当当", score: 9.6, maxScore: 10, ratingsCount: 38000, summary: "当当终身五星图书" }
-    ],
-    buyPoints: [
-      "和伴侣、家人总是吵架，沟通方式需要改变",
-      "职场中不擅长表达，总被误解",
-      "想提升情商，改善人际关系",
-      "面对冲突时总是情绪失控，事后后悔"
-    ],
-    sellPoints: [
-      "全球畅销50年，被联合国教科文组织列为全球非暴力解决冲突的最佳实践",
-      "豆瓣8.4分，7.6万人评价，沟通类必读经典",
-      "「观察-感受-需要-请求」四步法，简单实用可立即上手",
-      "适用于亲密关系、职场沟通、亲子教育等所有场景"
-    ],
-    painPoints: [
-      "为什么每次吵架都变成互相攻击？",
-      "明明是好意，说出来却像指责",
-      "不会拒绝，也不敢表达真实想法",
-      "亲密关系中总是鸡同鸭讲"
-    ],
-    redNotes: [
-      { id: "r10", title: "学完非暴力沟通，我和老公三个月没吵架了", snippet: "以前每次吵架都是互相指责，现在学会了「观察+感受+需要+请求」四步法，关系真的变好了。", likes: 48000, collects: 28000, url: "https://www.xiaohongshu.com/explore/xxx10", author: "婚姻自救指南" },
-      { id: "r11", title: "职场人必看！非暴力沟通让我拿到了晋升", snippet: "学会用非暴力沟通表达需求后，我不再是那个「好欺负」的老实人了。", likes: 36000, collects: 21000, url: "https://www.xiaohongshu.com/explore/xxx11", author: "职场成长日记" },
-      { id: "r12", title: "一张图读懂《非暴力沟通》核心方法", snippet: "把四步法做成了思维导图，贴在工位上每天看，沟通能力提升真的肉眼可见。", likes: 55000, collects: 42000, url: "https://www.xiaohongshu.com/explore/xxx12", author: "思维导图控" }
-    ],
-    platformLinks: [
-      { platform: "douban", platformName: "豆瓣读书", url: "https://book.douban.com/subject/3531253/" },
-      { platform: "weread", platformName: "微信读书", url: "https://weread.qq.com/web/bookDetail/8c232e30716b8e988c2ce2e" },
-      { platform: "jd", platformName: "京东", url: "https://search.jd.com/Search?keyword=非暴力沟通" },
-      { platform: "dangdang", platformName: "当当", url: "https://search.dangdang.com/?key=非暴力沟通" }
-    ]
-  },
-  {
-    id: "5",
-    title: "纳瓦尔宝典",
-    author: "埃里克·乔根森",
-    cover: "https://img2.doubanio.com/view/subject/l/public/s34241533.jpg",
-    publisher: "中信出版社",
-    publishDate: "2022-04",
-    isbn: "9787521751123",
-    pages: 256,
-    summary: "这本书收集整理了硅谷知名天使投资人纳瓦尔·拉维坎特在过去十年里通过推特、播客和采访等方式分享的人生智慧，向读者分享了关于财富积累和幸福人生的原则与方法。纳瓦尔不仅告诉读者怎样致富，还告诉读者怎样看待人生，怎样获得幸福。",
-    category: "商业财经",
-    ratings: [
-      { platform: "douban", platformName: "豆瓣读书", score: 8.3, maxScore: 10, ratingsCount: 31500, summary: "商业类年度好书，硅谷智慧精华" },
-      { platform: "weread", platformName: "微信读书", score: 86.5, maxScore: 100, ratingsCount: 28000, summary: "推荐值极高，创业者必读" },
-      { platform: "jd", platformName: "京东", score: 9.4, maxScore: 10, ratingsCount: 18000, summary: "好评率99%，商业类畅销TOP5" },
-      { platform: "dangdang", platformName: "当当", score: 9.5, maxScore: 10, ratingsCount: 22000, summary: "当当商业类年度畅销" }
-    ],
-    buyPoints: [
-      "想学习如何创造财富，实现财务自由",
-      "对人生感到迷茫，想找到努力的方向",
-      "想了解硅谷顶级投资人的思维方式",
-      "需要一本既有智慧又实用的枕边书"
-    ],
-    sellPoints: [
-      "硅谷投资教父纳瓦尔的智慧结晶，浓缩十年思考精华",
-      "从财富到幸福，构建完整的人生哲学体系",
-      "每条原则都能直接落地执行，不是空谈理论",
-      "豆瓣8.3分，3万+评价，2022年度商业类好书"
-    ],
-    painPoints: [
-      "拼命工作却赚不到钱，财富密码到底在哪？",
-      "有钱了就能幸福吗？为什么越有钱越焦虑？",
-      "如何找到自己真正热爱的事情？",
-      "普通人如何实现阶层跨越？"
-    ],
-    redNotes: [
-      { id: "r13", title: "把这本《纳瓦尔宝典》背下来，少走10年弯路", snippet: "纳瓦尔说：用头脑赚钱，而不是用时间赚钱。这本书值得每一个想搞钱的人全文背诵。", likes: 62000, collects: 38000, url: "https://www.xiaohongshu.com/explore/xxx13", author: "搞钱少女" },
-      { id: "r14", title: "纳瓦尔：财富自由的底层逻辑，看这一篇就够了", snippet: "把书里关于财富的核心观点做了整理，读完豁然开朗。", likes: 45000, collects: 29000, url: "https://www.xiaohongshu.com/explore/xxx14", author: "商业思维" },
-      { id: "r15", title: "25岁读到这本书，我的人生开始不一样了", snippet: "如果你还在迷茫，请一定读读纳瓦尔。他让我明白了什么是「把自己产品化」。", likes: 38000, collects: 22000, url: "https://www.xiaohongshu.com/explore/xxx15", author: "成长中的小鹿" }
-    ],
-    platformLinks: [
-      { platform: "douban", platformName: "豆瓣读书", url: "https://book.douban.com/subject/35876140/" },
-      { platform: "weread", platformName: "微信读书", url: "https://weread.qq.com/web/bookDetail/ece327f0813ab6ee3g018e0e" },
-      { platform: "jd", platformName: "京东", url: "https://search.jd.com/Search?keyword=纳瓦尔宝典" },
-      { platform: "dangdang", platformName: "当当", url: "https://search.dangdang.com/?key=纳瓦尔宝典" }
-    ]
-  },
-  {
-    id: "6",
-    title: "人类简史",
-    author: "尤瓦尔·赫拉利",
-    cover: "https://img2.doubanio.com/view/subject/l/public/s27814883.jpg",
-    publisher: "中信出版社",
-    publishDate: "2014-11",
-    isbn: "9787508647357",
-    pages: 440,
-    summary: "十万年前，地球上至少有六种不同的人，但今日，世界舞台为什么只剩下我们自己？从认知革命、农业革命到科学革命，我们是如何登上世界舞台成为万物之灵的？这本书将带你从全新的视角审视人类的历史和未来。",
-    category: "历史人文",
-    ratings: [
-      { platform: "douban", platformName: "豆瓣读书", score: 9.1, maxScore: 10, ratingsCount: 197000, summary: "豆瓣TOP250前列，历史类评分最高" },
-      { platform: "weread", platformName: "微信读书", score: 90.8, maxScore: 100, ratingsCount: 65000, summary: "神作级别推荐值" },
-      { platform: "jd", platformName: "京东", score: 9.8, maxScore: 10, ratingsCount: 42000, summary: "好评率99.7%" },
-      { platform: "dangdang", platformName: "当当", score: 9.8, maxScore: 10, ratingsCount: 50000, summary: "当当终身五星" }
-    ],
-    buyPoints: [
-      "想了解人类文明的宏大叙事但觉得历史太枯燥",
-      "对人类的未来发展充满好奇和担忧",
-      "想提升认知格局，拓宽思维边界",
-      "朋友推荐被称为「刷新三观」的神作"
-    ],
-    sellPoints: [
-      "全球销量超2500万册，被翻译成65种语言的现象级畅销书",
-      "豆瓣9.1分，近20万人评价，历史类天花板",
-      "比尔·盖茨、扎克伯格、奥巴马倾力推荐",
-      "从7万年前认知革命到AI时代，宏大叙事一气呵成"
-    ],
-    painPoints: [
-      "为什么人类会统治地球？",
-      "我们真的比采集狩猎时代更幸福吗？",
-      "金钱、帝国、宗教的本质是什么？",
-      "人类未来将走向何方？"
-    ],
-    redNotes: [
-      { id: "r16", title: "读完《人类简史》，我的世界观被彻底颠覆了", snippet: "原来我们以为的「常识」都是被建构出来的。这本书让我重新认识了人类文明。", likes: 85000, collects: 48000, url: "https://www.xiaohongshu.com/explore/xxx16", author: "世界观重塑" },
-      { id: "r17", title: "《人类简史》10个刷新认知的观点整理", snippet: "「人类是被小麦驯化的」「金钱是共同想象」每一个观点都让人脑洞大开。", likes: 72000, collects: 52000, url: "https://www.xiaohongshu.com/explore/xxx17", author: "知识整理官" },
-      { id: "r18", title: "看完《人类简史》，我决定不再焦虑了", snippet: "赫拉利说：人类可能是最不快乐的物种。原来焦虑是人类的出厂设置。", likes: 49000, collects: 28000, url: "https://www.xiaohongshu.com/explore/xxx18", author: "清醒阅读" }
-    ],
-    platformLinks: [
-      { platform: "douban", platformName: "豆瓣读书", url: "https://book.douban.com/subject/25985021/" },
-      { platform: "weread", platformName: "微信读书", url: "https://weread.qq.com/web/bookDetail/be732a30715c43dbe73e221" },
-      { platform: "jd", platformName: "京东", url: "https://search.jd.com/Search?keyword=人类简史" },
-      { platform: "dangdang", platformName: "当当", url: "https://search.dangdang.com/?key=人类简史" }
-    ]
-  },
-  {
-    id: "7",
-    title: "小王子",
-    author: "安托万·德·圣-埃克苏佩里",
-    cover: "https://img2.doubanio.com/view/subject/l/public/s1103152.jpg",
-    publisher: "人民文学出版社",
-    publishDate: "2003-08",
-    isbn: "9787020042494",
-    pages: 97,
-    summary: "以一位飞行员作为故事叙述者，讲述了小王子从自己星球出发前往地球的过程中，所经历的各种历险。作者以小王子的孩子式的眼光，透视出成人的空虚、盲目，愚妄和死板教条，用浅显天真的语言写出了人类的孤独寂寞、没有根基随风流浪的命运。",
-    category: "文学经典",
-    ratings: [
-      { platform: "douban", platformName: "豆瓣读书", score: 9.0, maxScore: 10, ratingsCount: 456000, summary: "豆瓣TOP250神作，全球读者最多的文学经典之一" },
-      { platform: "weread", platformName: "微信读书", score: 91.2, maxScore: 100, ratingsCount: 72000, summary: "推荐值极高，治愈系必读" },
-      { platform: "jd", platformName: "京东", score: 9.9, maxScore: 10, ratingsCount: 68000, summary: "好评率99.9%" },
-      { platform: "dangdang", platformName: "当当", score: 9.9, maxScore: 10, ratingsCount: 75000, summary: "当当终身五星" }
-    ],
-    buyPoints: [
-      "需要一本温暖治愈的小书来放松心情",
-      "想送一本有意义的书给朋友或恋人",
-      "听说过这本书但一直没有读过",
-      "想收藏一本经典文学作品"
-    ],
-    sellPoints: [
-      "全球销量超2亿册，仅次于《圣经》的畅销书",
-      "豆瓣9.0分，45.6万人评价，文学经典必读",
-      "适合从8岁到80岁的全年龄段读者",
-      "「如果你驯化了我，我们就彼此需要」——每一句都是金句"
-    ],
-    painPoints: [
-      "在忙碌的成人世界里失去了童心",
-      "人际关系越来越复杂，怀念简单纯粹",
-      "很久没有为一本书流过泪了",
-      "需要被提醒「真正重要的东西用眼睛是看不见的」"
-    ],
-    redNotes: [
-      { id: "r19", title: "每读一次《小王子》，就哭一次", snippet: "小时候读不懂，长大后每次读都泪流满面。原来我们都是被驯化了的狐狸。", likes: 92000, collects: 48000, url: "https://www.xiaohongshu.com/explore/xxx19", author: "深夜读书" },
-      { id: "r20", title: "《小王子》中最让人心碎的10句话", snippet: "「正是你为你的玫瑰花费的时间，才使你的玫瑰变得如此重要。」成年人的世界里没有童话。", likes: 78000, collects: 52000, url: "https://www.xiaohongshu.com/explore/xxx20", author: "句子控" },
-      { id: "r21", title: "送男朋友《小王子》后，他哭了", snippet: "没想到一本薄薄的小书有这么大的力量。他说：我终于理解了什么是「驯化」。", likes: 65000, collects: 34000, url: "https://www.xiaohongshu.com/explore/xxx21", author: "恋爱日常" }
-    ],
-    platformLinks: [
-      { platform: "douban", platformName: "豆瓣读书", url: "https://book.douban.com/subject/1084336/" },
-      { platform: "weread", platformName: "微信读书", url: "https://weread.qq.com/web/bookDetail/cea320105d1f10cea184b0b" },
-      { platform: "jd", platformName: "京东", url: "https://search.jd.com/Search?keyword=小王子" },
-      { platform: "dangdang", platformName: "当当", url: "https://search.dangdang.com/?key=小王子" }
-    ]
-  },
-  {
-    id: "8",
-    title: "原则",
-    author: "瑞·达利欧",
-    cover: "https://img2.doubanio.com/view/subject/l/public/s29468843.jpg",
-    publisher: "中信出版社",
-    publishDate: "2018-01",
-    isbn: "9787508684031",
-    pages: 576,
-    summary: "瑞·达利欧是全世界顶级投资家、企业家之一。他认为，我们可以像看待机器一样看待生活、管理、经商和投资，并将其系统化为一系列原则。这本书阐述了他的原则的两大基石——极度求真、极度透明，并介绍了以此为基础的创意择优，以及可信度加权的决策机制。",
-    category: "商业财经",
-    ratings: [
-      { platform: "douban", platformName: "豆瓣读书", score: 8.3, maxScore: 10, ratingsCount: 45200, summary: "商业类长销经典，全球管理者必读" },
-      { platform: "weread", platformName: "微信读书", score: 85.8, maxScore: 100, ratingsCount: 36000, summary: "推荐值高，职场进阶必备" },
-      { platform: "jd", platformName: "京东", score: 9.5, maxScore: 10, ratingsCount: 25000, summary: "好评率99.1%" },
-      { platform: "dangdang", platformName: "当当", score: 9.5, maxScore: 10, ratingsCount: 30000, summary: "当当商业类畅销常青树" }
-    ],
-    buyPoints: [
-      "想学习顶级投资人的决策方法",
-      "在职场或创业中需要系统化的原则指导",
-      "想提升自己的决策能力和管理能力",
-      "需要一套可以终身使用的思维框架"
-    ],
-    sellPoints: [
-      "桥水基金创始人瑞·达利欧毕生经验总结",
-      "全球销量超400万册，被翻译成30多种语言",
-      "500多条原则涵盖生活和工作，可直接套用",
-      "「痛苦+反思=进步」等核心公式已被无数人验证有效"
-    ],
-    painPoints: [
-      "每次遇到困难都像第一次遇到，没有积累经验",
-      "做决策时总是犹豫不决，缺乏判断框架",
-      "团队管理混乱，缺少透明的沟通机制",
-      "如何把失败变成成长的阶梯？"
-    ],
-    redNotes: [
-      { id: "r22", title: "花3个月读完《原则》，我整理了这份精华", snippet: "把500多条原则浓缩成20条核心法则，贴在办公桌上每天看，执行力提升明显。", likes: 58000, collects: 42000, url: "https://www.xiaohongshu.com/explore/xxx22", author: "效率控" },
-      { id: "r23", title: "《原则》教会我的最重要的一件事：痛苦+反思=进步", snippet: "以前遇到挫折就逃避，现在学会了把每次痛苦都当成进化的机会。", likes: 41000, collects: 23000, url: "https://www.xiaohongshu.com/explore/xxx23", author: "进化中的阿杰" },
-      { id: "r24", title: "达利欧的5步流程法，让我半年涨薪50%", snippet: "目标→问题→诊断→方案→执行，这5步让我在工作中脱颖而出。", likes: 36000, collects: 21000, url: "https://www.xiaohongshu.com/explore/xxx24", author: "职场进阶指南" }
-    ],
-    platformLinks: [
-      { platform: "douban", platformName: "豆瓣读书", url: "https://book.douban.com/subject/27608239/" },
-      { platform: "weread", platformName: "微信读书", url: "https://weread.qq.com/web/bookDetail/8c832e3071e4a8c78c8e2e8" },
-      { platform: "jd", platformName: "京东", url: "https://search.jd.com/Search?keyword=原则" },
-      { platform: "dangdang", platformName: "当当", url: "https://search.dangdang.com/?key=原则" }
-    ]
-  },
-  {
-    id: "9",
-    title: "明朝那些事儿",
-    author: "当年明月",
-    cover: "https://img2.doubanio.com/view/subject/l/public/s28437473.jpg",
-    publisher: "浙江人民出版社",
-    publishDate: "2011-11",
-    isbn: "9787213046766",
-    pages: 358,
-    summary: "《明朝那些事儿》讲述从1344年到1644年，明朝三百年间的历史。作品以史料为基础，以年代和具体人物为主线，并加入了小说的笔法，对明朝十七帝和其他王公权贵和小人物的命运进行全景展示，尤其对官场政治、战争、帝王心术着墨最多。",
-    category: "历史人文",
-    ratings: [
-      { platform: "douban", platformName: "豆瓣读书", score: 9.1, maxScore: 10, ratingsCount: 156000, summary: "豆瓣TOP250，中国最受欢迎的历史通俗读物" },
-      { platform: "weread", platformName: "微信读书", score: 92.0, maxScore: 100, ratingsCount: 82000, summary: "神作推荐值，历史类断层第一" },
-      { platform: "jd", platformName: "京东", score: 9.8, maxScore: 10, ratingsCount: 52000, summary: "好评率99.6%" },
-      { platform: "dangdang", platformName: "当当", score: 9.8, maxScore: 10, ratingsCount: 60000, summary: "当当终身五星" }
-    ],
-    buyPoints: [
-      "对历史感兴趣但觉得正史太枯燥",
-      "想找一本有趣又有料的历史入门书",
-      "被朋友强烈安利，说「看了就停不下来」",
-      "想了解明朝那些有趣的人物和故事"
-    ],
-    sellPoints: [
-      "豆瓣9.1分，15.6万人评价，中国历史通俗读物天花板",
-      "网络连载时代现象级神作，销量超千万册",
-      "用小说的笔法写历史，比电视剧还精彩",
-      "王阳明、张居正、海瑞、戚继光……300年明朝群星闪耀"
-    ],
-    painPoints: [
-      "历史书太枯燥，读两页就想睡觉",
-      "想了解中国历史但不知道从哪开始",
-      "教科书上的历史人物太扁平，想了解真实的人性",
-      "上下班路上想看点有趣又有收获的内容"
-    ],
-    redNotes: [
-      { id: "r25", title: "看完《明朝那些事儿》，我哭了一整晚", snippet: "当年明月说：成功只有一个——按照自己的方式，去度过人生。读到结尾泪崩了。", likes: 95000, collects: 52000, url: "https://www.xiaohongshu.com/explore/xxx25", author: "历史爱好者" },
-      { id: "r26", title: "《明朝那些事儿》中最让人破防的10个人物", snippet: "于谦、杨涟、海瑞……每一个都让人泪目。原来历史可以这样读。", likes: 72000, collects: 45000, url: "https://www.xiaohongshu.com/explore/xxx26", author: "书中自有颜如玉" },
-      { id: "r27", title: "零基础读历史，从《明朝那些事儿》开始就对了", snippet: "本来对历史无感，被朋友安利后一发不可收拾，7天刷完7本！", likes: 58000, collects: 36000, url: "https://www.xiaohongshu.com/explore/xxx27", author: "新手读书指南" }
-    ],
-    platformLinks: [
-      { platform: "douban", platformName: "豆瓣读书", url: "https://book.douban.com/subject/7163250/" },
-      { platform: "weread", platformName: "微信读书", url: "https://weread.qq.com/web/bookDetail/bd632a40715e0ebdbd6e99e" },
-      { platform: "jd", platformName: "京东", url: "https://search.jd.com/Search?keyword=明朝那些事儿" },
-      { platform: "dangdang", platformName: "当当", url: "https://search.dangdang.com/?key=明朝那些事儿" }
-    ]
-  },
-  {
-    id: "10",
-    title: "金字塔原理",
-    author: "芭芭拉·明托",
-    cover: "https://img2.doubanio.com/view/subject/l/public/s28382893.jpg",
-    publisher: "南海出版公司",
-    publishDate: "2013-11",
-    isbn: "9787544268882",
-    pages: 304,
-    summary: "金字塔原理是一种重点突出、逻辑清晰、主次分明的逻辑思路、表达方式和规范动作。本书是麦肯锡40年经典培训教材，介绍了金字塔原理在写作、思考、解决问题和演示中的运用。",
-    category: "职场技能",
-    ratings: [
-      { platform: "douban", platformName: "豆瓣读书", score: 8.0, maxScore: 10, ratingsCount: 18600, summary: "职场思维训练经典，麦肯锡方法论" },
-      { platform: "weread", platformName: "微信读书", score: 82.5, maxScore: 100, ratingsCount: 22000, summary: "推荐值高，职场人必读" },
-      { platform: "jd", platformName: "京东", score: 9.3, maxScore: 10, ratingsCount: 15000, summary: "好评率98.8%" },
-      { platform: "dangdang", platformName: "当当", score: 9.4, maxScore: 10, ratingsCount: 18000, summary: "当当职场类畅销常青树" }
-    ],
-    buyPoints: [
-      "写报告、做汇报总是逻辑混乱说不清楚",
-      "想提升职场竞争力，学习顶级咨询公司的思维方法",
-      "汇报时领导总说「说重点」，但不知道什么是重点",
-      "想系统提升自己的逻辑思维和表达能力"
-    ],
-    sellPoints: [
-      "麦肯锡40年经典培训教材，全球咨询顾问的必修课",
-      "金字塔原理已被全球500强企业广泛采用",
-      "从思考到表达到演示，构建完整的逻辑体系",
-      "适用于写作、汇报、演讲、解决问题等所有职场场景"
-    ],
-    painPoints: [
-      "写了一大堆材料，领导却说没重点",
-      "和同事沟通时总是鸡同鸭讲",
-      "做PPT不知从何下手，逻辑混乱",
-      "想问题总是想不清楚，抓不住关键"
-    ],
-    redNotes: [
-      { id: "r28", title: "学会金字塔原理后，我的周报被领导当模板了", snippet: "「结论先行、以上统下、归类分组、逻辑递进」这16个字，让我从职场小白变成了汇报高手。", likes: 43000, collects: 31000, url: "https://www.xiaohongshu.com/explore/xxx28", author: "职场进阶指南" },
-      { id: "r29", title: "一张图讲清楚金字塔原理，建议收藏", snippet: "把整本书的核心做成了思维导图，看完就懂，建议所有职场人收藏。", likes: 52000, collects: 45000, url: "https://www.xiaohongshu.com/explore/xxx29", author: "思维导图控" },
-      { id: "r30", title: "面试时说用了金字塔原理，面试官眼睛亮了", snippet: "用金字塔原理结构化回答问题，面试官说：你的逻辑非常清晰。", likes: 38000, collects: 22000, url: "https://www.xiaohongshu.com/explore/xxx30", author: "求职攻略" }
-    ],
-    platformLinks: [
-      { platform: "douban", platformName: "豆瓣读书", url: "https://book.douban.com/subject/25748796/" },
-      { platform: "weread", platformName: "微信读书", url: "https://weread.qq.com/web/bookDetail/c6c3207071e1c7a6c6c3e2e" },
-      { platform: "jd", platformName: "京东", url: "https://search.jd.com/Search?keyword=金字塔原理" },
-      { platform: "dangdang", platformName: "当当", url: "https://search.dangdang.com/?key=金字塔原理" }
-    ]
-  }
+  // ===== 个人成长 (10本) =====
+  mkBook("1","认知觉醒","周岭","https://img2.doubanio.com/view/subject/l/public/s33858631.jpg","人民邮电出版社","2020-06","9787115543424",304,
+    "为什么我们做事总是急于求成、避难趋易？本书通过「大脑构造、潜意识、元认知」等思维规律，帮助读者真正看清自己；通过「深度学习、关联、反馈」等规律，帮助读者洞悉如何真正成事。",
+    "个人成长",8.1,18420,
+    ["拖延症晚期想改变却不知从何下手","明知重要却总被手机和娱乐分散注意力","努力很久却看不到进步，陷入自我怀疑","想培养好习惯但总是三分钟热度"],
+    ["7大底层概念，20个成长关键词，科学拆解认知升级路径","基于脑科学和心理学，不是鸡汤而是可操作的认知方法论","豆瓣8.1分，微信读书推荐值87%，百万读者验证","从元认知到自控力到专注力，形成完整成长闭环"],
+    ["每天忙忙碌碌却没有真正的成长","知道很多道理却依然过不好这一生","焦虑迷茫找不到人生的方向","想自律但大脑总被即时满足劫持"]),
+
+  mkBook("11","刻意练习","安德斯·艾利克森","https://img2.doubanio.com/view/subject/l/public/s29144914.jpg","机械工业出版社","2016-11","9787111551287",288,
+    "著名心理学家安德斯·艾利克森研究「杰出人物」长达30年，发现天才并非天生，而是「刻意练习」的结果。本书揭示了如何通过有目的的练习，在任何领域成为顶尖高手。",
+    "个人成长",7.9,12200,
+    ["想提升技能但不知道正确方法","努力了很久却没有明显进步","觉得自己没天赋永远追不上别人","想成为某个领域的专家但不知从何入手"],
+    ["推翻「一万小时定律」的迷思，揭示真正有效的练习方法","作者是「刻意练习」法则的原创者，学术权威","提供具体可操作的练习框架，适用于任何领域","豆瓣7.9分，知乎、得到等平台强烈推荐"],
+    ["为什么我练了这么久还是没进步","天赋真的决定一切吗","如何找到正确的学习方法","普通人如何逆袭成为高手"]),
+
+  mkBook("12","原子习惯","詹姆斯·克利尔","https://img2.doubanio.com/view/subject/l/public/s33668923.jpg","北京联合出版公司","2019-07","9787559642257",256,
+    "细微改变带来巨大成就。本书教你如何借助「行为改变四大法则」——让提示显而易见、让习惯有吸引力、让行动轻而易举、让奖赏令人满足——来建立好习惯、戒除坏习惯。",
+    "个人成长",8.4,21500,
+    ["想培养好习惯但总是坚持不下去","每次制定计划都半途而废","想改变自己但总是三天打鱼两天晒网","生活一团糟想找到系统性的改变方法"],
+    ["全球畅销超1000万册，被翻译成50多种语言","基于行为科学的四大法则，简单易行","不靠意志力，靠系统设计来改变习惯","每一章都有具体可执行的行动指南"],
+    ["为什么我的新年计划总是失败","改变为什么这么难","好习惯如何养成坏习惯如何戒掉","如何让改变自动发生"]),
+
+  mkBook("13","终身成长","卡罗尔·德韦克","https://img2.doubanio.com/view/subject/l/public/s29782493.jpg","江西人民出版社","2017-11","9787210097523",234,
+    "斯坦福大学心理学家卡罗尔·德韦克揭示了「成长型思维」和「固定型思维」两种思维模式，以及它们如何影响我们的成功、幸福和人际关系。",
+    "个人成长",8.2,16800,
+    ["遇到挫折就容易放弃","害怕失败不敢尝试新事物","总觉得自己不够聪明","看到别人成功就觉得自己不行"],
+    ["斯坦福大学心理学教授数十年研究成果","比尔·盖茨亲自撰文推荐","改变思维模式就能改变人生","适用于教育、职场、亲密关系等所有领域"],
+    ["为什么我总觉得自己不行","失败后如何重新站起来","如何培养孩子的自信心","成功人士的思维模式有什么不同"]),
+
+  mkBook("14","高效能人士的七个习惯","史蒂芬·柯维","https://img2.doubanio.com/view/subject/l/public/s28054873.jpg","中国青年出版社","2010-10","9787500649038",368,
+    "本书对个人和组织的效能提升提供了系统化的解决方案。七个习惯环环相扣：从个人领域的「积极主动、以终为始、要事第一」，到公众领域的「双赢思维、知彼解己、统合综效」，再到「不断更新」。",
+    "个人成长",8.5,33200,
+    ["工作效率低总是忙不过来","想提升领导力但不知道从何开始","生活和工作的平衡一团糟","想建立系统性的自我管理体系"],
+    ["全球销量超4000万册，影响力跨越30年","被《福布斯》评为「有史以来最具影响力的十大管理类书籍」","七个习惯形成完整闭环，从个人到团队全面覆盖","普京、克林顿等世界领袖推荐"],
+    ["为什么我每天都很忙却没有成果","如何平衡工作与生活","团队协作效率低怎么办","个人成长的底层逻辑是什么"]),
+
+  mkBook("15","掌控习惯","詹姆斯·克利尔","https://img2.doubanio.com/view/subject/l/public/s33668923.jpg","北京联合出版公司","2019-07","9787559642257",256,
+    "本书是《原子习惯》的姊妹篇，深入探讨如何通过微小的习惯改变，实现人生的巨大转变。每一天进步1%，一年后你会进步37倍。",
+    "个人成长",8.4,21500,
+    ["想改变却总是原地踏步","好习惯坚持不下来","坏习惯戒不掉","想系统化地管理自己的生活"],
+    ["全球畅销书《原子习惯》作者又一力作","1%法则：每天进步一点点，复利效应惊人","提供具体可追踪的习惯养成工具","不依赖意志力，靠系统设计"],
+    ["为什么改变总是失败","习惯的力量到底有多大","如何让改变变得轻松","怎么建立可持续的习惯系统"]),
+
+  mkBook("16","心流","米哈里·契克森米哈赖","https://img2.doubanio.com/view/subject/l/public/s27206901.jpg","中信出版社","2017-12","9787508675534",296,
+    "「心流」是一种全神贯注、投入忘我的状态。本书告诉你如何通过控制意识，达到最优体验，从而提升幸福感和效率。",
+    "个人成长",8.3,9800,
+    ["工作学习时总是分心无法专注","感觉生活缺乏意义和乐趣","想知道如何提升幸福感和创造力","想找到让自己沉浸其中的事情"],
+    ["积极心理学奠基之作，改变无数人的人生观","「心流」概念已被全球广泛认可和应用","提供具体方法进入心流状态","适用于工作、学习、运动、艺术等所有领域"],
+    ["为什么我无法专注","幸福到底是什么","如何让工作变得有趣","面对无聊乏味的事情怎么办"]),
+
+  mkBook("17","自控力","凯利·麦格尼格尔","https://img2.doubanio.com/view/subject/l/public/s28286381.jpg","文化发展出版社","2012-08","9787514205039",240,
+    "斯坦福大学最受欢迎的心理学课程，教你如何科学地提升自控力，克服拖延，管理压力，做出更好的选择。",
+    "个人成长",8.1,16800,
+    ["明知道该做什么却总是拖延","想减肥却管不住嘴","想学习却忍不住刷手机","自控力太差总是半途而废"],
+    ["斯坦福大学最受欢迎心理学课程精华","基于神经科学，告诉你自控力的生理机制","提供可操作的提升自控力方法","不是鸡汤，是科学"],
+    ["为什么我总是管不住自己","自控力是天生的吗","如何克服拖延症","压力大时更容易失控怎么办"]),
+
+  mkBook("18","把时间当作朋友","李笑来","https://img2.doubanio.com/view/subject/l/public/s29842484.jpg","电子工业出版社","2013-10","9787121210099",288,
+    "这不是一本时间管理的书，而是一本关于自我成长的书。作者认为，时间无法管理，我们只能管理自己。本书帮助你认清现实，开启心智，与时间做朋友。",
+    "个人成长",8.5,14200,
+    ["总觉得时间不够用","想学的东西太多不知从何开始","焦虑自己进步太慢","想提高学习效率"],
+    ["李笑来经典之作，影响了无数年轻人","提出「时间不可管理，只能管理自己」的颠覆性观点","实操性强，每个观点都可以立即行动","没有鸡汤，全是干货和思维升级"],
+    ["为什么我总觉得时间不够用","如何高效学习","焦虑怎么破","普通人如何快速成长"]),
+
+  // ===== 心理学 (8本) =====
+  mkBook("2","被讨厌的勇气","岸见一郎/古贺史健","https://img2.doubanio.com/view/subject/l/public/s28382891.jpg","机械工业出版社","2015-03","9787111495482",194,
+    "本书用「青年与哲人」的对话形式，总结了阿德勒心理学的核心思想。所谓的「自由」，就是被别人讨厌。",
+    "心理学",8.5,98700,
+    ["总是太在意别人的看法，活得小心翼翼","在人际关系中感到疲惫，不知道如何拒绝别人","缺乏自信，总觉得别人比自己优秀","想改变自己的生活状态，但缺乏勇气"],
+    ["阿德勒心理学经典入门，对话体轻松易读","豆瓣8.5分，近10万人评价，改变无数人","「课题分离」概念影响千万人","蔡康永、曾宝仪等多位名人推荐"],
+    ["为什么我总是活在别人的期待里","讨好型人格让我筋疲力尽","原生家庭的阴影如何走出来","不敢做自己，怕被讨厌"]),
+
+  mkBook("19","思考，快与慢","丹尼尔·卡尼曼","https://img2.doubanio.com/view/subject/l/public/s1108615.jpg","中信出版社","2012-07","9787508633558",424,
+    "诺贝尔经济学奖得主丹尼尔·卡尼曼的经典之作。他揭示了人类大脑的两个系统：系统1（快速、直觉）和系统2（缓慢、理性），以及它们如何影响我们的判断和决策。",
+    "心理学",8.2,32500,
+    ["做决策时总是犹豫不决","经常事后后悔自己的选择","想了解人类思维的底层逻辑","想提升判断力和决策质量"],
+    ["诺贝尔经济学奖得主毕生研究精华","揭示了人类认知偏误的底层机制","全球畅销超百万册，被翻译成40多种语言","改变你对「理性」的认知"],
+    ["为什么我做的决策总是错的","人类真的理性吗","如何避免认知偏误","直觉靠谱吗"]),
+
+  mkBook("20","乌合之众","古斯塔夫·勒庞","https://img2.doubanio.com/view/subject/l/public/s1103153.jpg","中央编译出版社","2011-05","9787511708021",176,
+    "群体心理学经典之作。勒庞深刻剖析了群体心理的特征：当个人融入群体后，他的个性便会被湮没，群体的思想占据统治地位。",
+    "心理学",8.2,28400,
+    ["想理解群体行为背后的心理机制","对网络暴力和舆论传播感到困惑","想了解大众心理是如何被操控的","对政治和社会现象有好奇心"],
+    ["群体心理学开山之作，130年经久不衰","弗洛伊德、荣格等大师高度评价","理解互联网时代舆论传播的底层逻辑","篇幅短小精悍，半天即可读完"],
+    ["为什么乌合之众如此可怕","谣言是如何传播的","网络暴力为什么屡禁不止","群体决策为什么常常是错的"]),
+
+  mkBook("21","影响力","罗伯特·西奥迪尼","https://img2.doubanio.com/view/subject/l/public/s28333782.jpg","北京联合出版公司","2016-09","9787550258174",352,
+    "为什么有些人极具说服力，而我们总是容易上当受骗？本书揭示了隐藏在冲动地顺从他人行为背后的6大心理秘笈：互惠、承诺和一致、社会认同、喜好、权威、稀缺。",
+    "心理学",8.6,28700,
+    ["总是被销售套路忽悠","想提升说服力和影响力","想了解营销和广告的底层心理学","想保护自己不被操纵"],
+    ["全球畅销超300万册，被翻译成26种语言","查理·芒格亲自推荐，并赠送作者一股伯克希尔股票","6大影响力武器，每一个都可以直接应用","营销人员、销售人员的必读圣经"],
+    ["为什么我总是被忽悠","销售话术背后的心理学原理","如何提高自己的说服力","如何识别并抵抗他人的影响"]),
+
+  mkBook("22","自卑与超越","阿尔弗雷德·阿德勒","https://img2.doubanio.com/view/subject/l/public/s28382894.jpg","北京联合出版公司","2016-01","9787550260582",256,
+    "阿德勒个体心理学的代表作。他提出：自卑感是人类进步的动力，关键在于如何超越自卑，实现自我价值。",
+    "心理学",8.3,15600,
+    ["内心自卑不敢表达自己","总觉得自己不如别人","想了解阿德勒心理学","想找到人生的意义和方向"],
+    ["阿德勒心理学经典，与《被讨厌的勇气》配套阅读","揭秘自卑感是人类进步的动力","提供「超越自卑」的具体方法","对教育、心理治疗、个人成长都有深刻启发"],
+    ["为什么我总觉得自己不够好","自卑感是天生的吗","如何把自卑变成动力","人生的意义是什么"]),
+
+  mkBook("23","也许你该找个人聊聊","洛莉·戈特利布","https://img2.doubanio.com/view/subject/l/public/s33991763.jpg","上海文化出版社","2021-06","9787553519753",384,
+    "一位心理治疗师的治疗故事。她既是治疗师，也是来访者。这本书讲述了四个来访者和治疗师自己接受治疗的真实故事，温暖、幽默又深刻。",
+    "心理学",8.9,19800,
+    ["内心有困扰但不确定是否需要心理咨询","对心理咨询感到好奇","想了解别人的故事获得共鸣","需要一个温暖治愈的阅读体验"],
+    ["豆瓣8.9分，年度最受欢迎心理类图书","《纽约时报》畅销书榜第一名","真人真事，比小说更精彩","让你在笑声和泪水中理解人性"],
+    ["我该不该去看心理医生","心理咨询到底是什么样的","为什么我总是重复同样的错误","如何面对人生的痛苦"]),
+
+  mkBook("24","蛤蟆先生去看心理医生","罗伯特·戴博德","https://img2.doubanio.com/view/subject/l/public/s33851621.jpg","天津人民出版社","2020-07","9787201161693",209,
+    "借用了《柳林风声》的角色蛤蟆先生，讲述了他接受心理咨询的全过程。通过10次心理咨询，蛤蟆先生从抑郁中走了出来，重新认识了自己。",
+    "心理学",8.5,31200,
+    ["情绪低落不知道怎么办","想了解心理咨询是怎样的","对自我成长有需求","需要一个温暖的入门书"],
+    ["豆瓣8.5分，3万+评价，最受欢迎的心理咨询入门书","用童话故事讲心理咨询，亲切易懂","10次咨询完整呈现，适合零基础","看完仿佛自己也做了一次心理咨询"],
+    ["我是不是抑郁了","心理咨询到底有没有用","如何认识真实的自己","情绪问题该怎么解决"]),
+
+  // ===== 文学经典 (10本) =====
+  mkBook("7","小王子","安托万·德·圣-埃克苏佩里","https://img2.doubanio.com/view/subject/l/public/s1103152.jpg","人民文学出版社","2003-08","9787020042494",97,
+    "以小王子的孩子式的眼光，透视出成人的空虚、盲目，愚妄和死板教条，用浅显天真的语言写出了人类的孤独寂寞。",
+    "文学经典",9.0,456000,
+    ["需要一本温暖治愈的小书来放松心情","想送一本有意义的书给朋友或恋人","听说过这本书但一直没有读过","想收藏一本经典文学作品"],
+    ["全球销量超2亿册，仅次于《圣经》的畅销书","豆瓣9.0分，45.6万人评价，文学经典必读","适合从8岁到80岁的全年龄段读者","每一句都是金句，值得反复阅读"],
+    ["在忙碌的成人世界里失去了童心","人际关系越来越复杂，怀念简单纯粹","很久没有为一本书流过泪了","需要被提醒真正重要的东西"]),
+
+  mkBook("25","活着","余华","https://img2.doubanio.com/view/subject/l/public/s29053580.jpg","作家出版社","2012-08","9787506365437",191,
+    "讲述了农村人福贵悲惨的人生遭遇。福贵本是个阔少爷，因嗜赌如命败光了家产，从此一贫如洗。他的亲人相继离他而去，最后只剩一头老牛与他相依为命。",
+    "文学经典",9.4,285000,
+    ["想读一部真正震撼人心的文学作品","被朋友强烈推荐说「看完哭了一整夜」","想了解中国当代文学的代表作","需要一次深刻的生命体验"],
+    ["豆瓣9.4分，28.5万人评价，华语文学天花板","张艺谋同名电影改编，巩俐、葛优主演","余华代表作，被翻译成20多种语言","篇幅短小却力透纸背，一下午就能读完"],
+    ["人生的意义到底是什么","面对苦难我们该如何活着","很久没有为一本书哭了","想了解中国底层人民的真实生活"]),
+
+  mkBook("26","百年孤独","加西亚·马尔克斯","https://img2.doubanio.com/view/subject/l/public/s6384944.jpg","南海出版公司","2011-06","9787544253994",360,
+    "魔幻现实主义文学的代表作，描写了布恩迪亚家族七代人的传奇故事，以及加勒比海沿岸小镇马孔多的百年兴衰，反映了拉丁美洲一个世纪以来风云变幻的历史。",
+    "文学经典",9.2,168000,
+    ["想读一部世界级的文学经典","想体验魔幻现实主义的魅力","被朋友推荐说是「人生必读」","想挑战自己的阅读能力"],
+    ["诺贝尔文学奖获奖作品，世界文学巅峰","豆瓣9.2分，16.8万人评价","影响了包括莫言在内的无数中国作家","「多年以后，面对行刑队……」开篇封神"],
+    ["经典文学太难读怎么办","读《百年孤独》有什么技巧","如何处理复杂的人物关系","魔幻现实主义的魅力在哪里"]),
+
+  mkBook("27","围城","钱钟书","https://img2.doubanio.com/view/subject/l/public/s1070222.jpg","人民文学出版社","1991-02","9787020024759",359,
+    "「围在城里的人想逃出来，城外的人想冲进去。」钱钟书唯一的这部长篇小说，被誉为「新儒林外史」，以幽默讽刺的笔调描写了抗战初期知识分子的群像。",
+    "文学经典",9.0,112000,
+    ["想读中国最幽默的文学作品","听说「围城」这个比喻想了解出处","想了解民国时期知识分子的生活","需要一本既有趣又有深度的书"],
+    ["豆瓣9.0分，中国现代文学巅峰之作","「围城」已成为中国文化中的经典比喻","钱钟书的幽默和智慧举世无双","每一页都让人会心一笑又深感无奈"],
+    ["婚姻为什么是围城","知识分子为什么总是眼高手低","如何读懂钱钟书的讽刺","那个年代的人在想什么"]),
+
+  mkBook("28","平凡的世界","路遥","https://img2.doubanio.com/view/subject/l/public/s28829052.jpg","北京十月文艺出版社","2012-03","9787530212004",816,
+    "以中国70年代中期到80年代中期十年间为背景，以孙少安和孙少平两兄弟为中心，展示了普通人在大时代历史进程中所走过的艰难曲折的道路。",
+    "文学经典",9.0,98000,
+    ["想了解中国改革开放初期的社会变迁","想读一部激励人心的现实主义作品","在迷茫时想找到奋斗的力量","朋友推荐说「看完会充满力量」"],
+    ["茅盾文学奖获奖作品，中国现实主义文学高峰","豆瓣9.0分，近10万人评价","激励了整整一代中国人","虽然篇幅长但读起来根本停不下来"],
+    ["普通人如何在大时代中自处","奋斗的意义是什么","贫穷如何改变一个人","那个年代的爱情是什么样的"]),
+
+  mkBook("29","杀死一只知更鸟","哈珀·李","https://img2.doubanio.com/view/subject/l/public/s26851038.jpg","译林出版社","2012-09","9787544722766",324,
+    "以一个小女孩的视角，讲述了种族歧视、正义与勇气。父亲阿蒂克斯·芬奇为一名被诬告强奸白人女子的黑人辩护，在这个过程中，孩子们学会了什么是真正的勇气。",
+    "文学经典",9.2,78000,
+    ["想读一本关于勇气和正义的经典","想了解美国种族问题的历史","想找一本适合亲子共读的文学经典","需要一本温暖又有力量的书"],
+    ["普利策奖获奖作品，全球最受欢迎的小说之一","豆瓣9.2分，7.8万人评价","阿蒂克斯·芬奇被评为「20世纪最伟大的小说英雄」","既适合成人也适合青少年阅读"],
+    ["什么是真正的勇气","如何教育孩子面对不公","面对偏见我们能做什么","正义为什么经常迟到"]),
+
+  mkBook("30","1984","乔治·奥威尔","https://img2.doubanio.com/view/subject/l/public/s4371408.jpg","北京十月文艺出版社","2010-04","9787530210291",304,
+    "一部伟大的政治寓言小说。在假想的未来社会中，独裁者以追逐权力为最终目标，人性被彻底扼杀，自由被彻底剥夺，思想受到严酷钳制。",
+    "文学经典",9.3,152000,
+    ["想了解反乌托邦文学的经典","对社会和政治问题有思考","想读一本让人震撼的小说","朋友强烈推荐说「读完会改变世界观」"],
+    ["被誉为20世纪最伟大的英语小说","豆瓣9.3分，15.2万人评价","「老大哥在看着你」已成为文化符号","预言了监控社会、fake news等现代现象"],
+    ["自由到底是什么","极权主义如何控制思想","我们离1984的世界有多远","为什么真相如此重要"]),
+
+  mkBook("31","傲慢与偏见","简·奥斯汀","https://img2.doubanio.com/view/subject/l/public/s1170618.jpg","译林出版社","2010-06","9787544711302",304,
+    "以18世纪末19世纪初的英国乡村为背景，围绕班纳特家五个女儿的婚姻大事展开。伊丽莎白和达西从误解到相爱，最终克服了各自的傲慢与偏见。",
+    "文学经典",8.9,156000,
+    ["想读一本经典的爱情小说","想了解英国文学的代表作","想体验简·奥斯汀的幽默和智慧","需要一本轻松又深刻的读物"],
+    ["全球最受欢迎的经典爱情小说之一","豆瓣8.9分，15.6万人评价","多次被改编为电影和电视剧","伊丽莎白和达西是最经典的文学CP"],
+    ["为什么经典爱情小说值得读","傲慢与偏见如何影响爱情","如何理解18世纪的英国社会","女性独立意识如何觉醒"]),
+
+  mkBook("32","房思琪的初恋乐园","林奕含","https://img2.doubanio.com/view/subject/l/public/s29803302.jpg","北京联合出版公司","2017-02","9787550296503",256,
+    "这是一部惊人而特别的小说，作者以令人心碎却又无能为力的真实故事，向读者展现了女性在成长过程中可能遭遇的伤害。",
+    "文学经典",9.2,142000,
+    ["想了解女性成长中的真实困境","对社会议题有深度思考","想读一本有力量又让人心碎的书","关注性侵和性别议题"],
+    ["豆瓣9.2分，14.2万人评价，震撼无数读者","作者以生命写就的作品","引爆社会对性侵议题的广泛讨论","文笔精美，情感真挚，令人泪目"],
+    ["为什么受害者常常沉默","社会对女性的保护够吗","如何保护我们的孩子","受过伤的人如何走出来"]),
+
+  // ===== 科幻小说 (6本) =====
+  mkBook("3","三体","刘慈欣","https://img2.doubanio.com/view/subject/l/public/s2768378.jpg","重庆出版社","2008-01","9787536692930",302,
+    "文化大革命如火如荼进行的同时，军方探寻外星文明的绝秘计划「红岸工程」取得了突破性进展。地球文明向宇宙发出的第一声啼鸣，彻底改变了人类的命运。",
+    "科幻小说",8.8,296000,
+    ["想读一部真正震撼人心的科幻作品","看过《三体》电视剧想深入了解原著","朋友强烈推荐被称为「中国科幻天花板」","想体验「降维打击」级别的想象力冲击"],
+    ["雨果奖获奖作品，中国科幻文学里程碑","奥巴马、扎克伯格、雷军等全球名人推荐","豆瓣8.8分，近30万人评价","黑暗森林法则等概念已融入日常语言"],
+    ["觉得科幻小说太硬核读不懂","不知道中国也有世界级的科幻作品","每天被琐事占据想体验一次思维的宇宙漫游","对宇宙和人类命运充满好奇找不到入口"]),
+
+  mkBook("33","三体II：黑暗森林","刘慈欣","https://img2.doubanio.com/view/subject/l/public/s3078482.jpg","重庆出版社","2008-05","9787536693968",400,
+    "三体人在利用魔法般的科技锁死了地球人的科学之后，庞大的宇宙舰队开始向地球进发。人类面临前所未有的危机，面壁计划由此展开。",
+    "科幻小说",9.3,178000,
+    ["读完《三体》第一部迫不及待想看续集","想了解黑暗森林法则的完整阐述","想体验比第一部更宏大的宇宙观","想看罗辑和章北海的精彩故事"],
+    ["豆瓣9.3分，系列评分最高的一部","黑暗森林法则震撼了整个科幻界","罗辑、章北海成为最经典的科幻角色","被认为是「三体三部曲中最好的一部」"],
+    ["黑暗森林法则是什么","人类面对外星文明如何自保","面壁者的计划有多精彩","为什么第二部比第一部更好看"]),
+
+  mkBook("34","三体III：死神永生","刘慈欣","https://img2.doubanio.com/view/subject/l/public/s4638195.jpg","重庆出版社","2010-11","9787536699335",513,
+    "与三体文明的战争使人类第一次看到了宇宙黑暗的真相，地球文明像一个恐惧的孩子，在暗夜中发抖。宇宙的田园时代已经远去，黑暗森林的真相即将揭晓。",
+    "科幻小说",9.2,145000,
+    ["读完前两部必须看结局","想体验宇宙终极的浪漫与残酷","想了解程心和云天明跨越时空的故事","想看科幻史上最震撼的结局"],
+    ["豆瓣9.2分，三部曲的完美收官","宇宙文明的终极想象，超出人类理解","「降维打击」「二向箔」等概念在这里诞生","读完会让人沉默一整天的震撼结局"],
+    ["宇宙的结局是什么","程心为什么被骂","降维打击有多可怕","文明的意义是什么"]),
+
+  mkBook("35","银河帝国：基地","艾萨克·阿西莫夫","https://img2.doubanio.com/view/subject/l/public/s26364101.jpg","江苏凤凰文艺出版社","2015-10","9787539971712",328,
+    "人类蜗居在地球上，建立了两万多年的银河帝国。哈里·谢顿预言帝国即将灭亡，并在银河边缘建立「基地」，试图缩短黑暗时代。",
+    "科幻小说",9.1,48000,
+    ["想了解科幻文学的源头","想读一部宏大叙事的科幻经典","喜欢《三体》想了解更多科幻经典","想体验科幻黄金时代的魅力"],
+    ["被誉为「人类历史上最好看的系列小说」","阿西莫夫是科幻三巨头之首","影响了《星球大战》等无数科幻作品","心理史学、机器人三定律等概念影响深远"],
+    ["科幻小说的起源是什么","为什么阿西莫夫被称为科幻之神","心理史学是什么","基地系列从哪里开始读"]),
+
+  mkBook("36","流浪地球","刘慈欣","https://img2.doubanio.com/view/subject/l/public/s33502242.jpg","中国华侨出版社","2016-06","9787511360342",288,
+    "太阳即将毁灭，人类在地球表面建造了巨大的推进器，试图将地球推出太阳系，寻找新的家园。在这场跨越2500年的流浪之旅中，人类面临了前所未有的挑战。",
+    "科幻小说",8.4,38000,
+    ["看过《流浪地球》电影想读原著","想了解刘慈欣除了三体之外的作品","想体验中国科幻短篇的魅力","需要在路上能快速读完的科幻"],
+    ["同名电影票房46亿，轰动全球","刘慈欣短篇科幻精华合集","收录了《流浪地球》《乡村教师》等经典","篇幅短小精悍，适合碎片时间阅读"],
+    ["电影和原著有什么不同","刘慈欣的短篇水平如何","还有哪些中国科幻推荐","科幻短篇的魅力在哪里"]),
+
+  // ===== 商业财经 (8本) =====
+  mkBook("5","纳瓦尔宝典","埃里克·乔根森","https://img2.doubanio.com/view/subject/l/public/s34241533.jpg","中信出版社","2022-04","9787521751123",256,
+    "硅谷知名天使投资人纳瓦尔·拉维坎特十年人生智慧，向读者分享了关于财富积累和幸福人生的原则与方法。",
+    "商业财经",8.3,31500,
+    ["想学习如何创造财富实现财务自由","对人生感到迷茫想找到努力的方向","想了解硅谷顶级投资人的思维方式","需要一本既有智慧又实用的枕边书"],
+    ["硅谷投资教父纳瓦尔的智慧结晶，浓缩十年思考精华","从财富到幸福，构建完整的人生哲学体系","每条原则都能直接落地执行，不是空谈理论","豆瓣8.3分，3万+评价，年度商业类好书"],
+    ["拼命工作却赚不到钱","有钱了就能幸福吗","如何找到自己真正热爱的事情","普通人如何实现阶层跨越"]),
+
+  mkBook("8","原则","瑞·达利欧","https://img2.doubanio.com/view/subject/l/public/s29468843.jpg","中信出版社","2018-01","9787508684031",576,
+    "桥水基金创始人瑞·达利欧毕生经验总结。他认为，我们可以像看待机器一样看待生活、管理、经商和投资，并将其系统化为一系列原则。",
+    "商业财经",8.3,45200,
+    ["想学习顶级投资人的决策方法","在职场或创业中需要系统化的原则指导","想提升自己的决策能力和管理能力","需要一套可以终身使用的思维框架"],
+    ["桥水基金创始人瑞·达利欧毕生经验总结","全球销量超400万册，被翻译成30多种语言","500多条原则涵盖生活和工作，可直接套用","「痛苦+反思=进步」等核心公式已被无数人验证"],
+    ["每次遇到困难都像第一次遇到","做决策时总是犹豫不决","团队管理混乱","如何把失败变成成长的阶梯"]),
+
+  mkBook("37","富爸爸穷爸爸","罗伯特·清崎","https://img2.doubanio.com/view/subject/l/public/s28432473.jpg","四川人民出版社","2017-09","9787220102189",224,
+    "清崎有两个爸爸：穷爸爸是他的亲生父亲，富爸爸是他好朋友的父亲。两个爸爸对金钱的看法截然不同，这让清崎看到了金钱的真相。",
+    "商业财经",8.3,42000,
+    ["想改变对金钱的认知","想学习理财但不知道从何开始","想了解富人思维和穷人思维的区别","想实现财务自由"],
+    ["全球销量超4000万册，改变了无数人的金钱观","「资产和负债」的概念简单但深刻","提出了「财务自由」的路径","适合零基础小白入门理财"],
+    ["为什么我工作多年还是没钱","富人和穷人的思维有什么不同","什么是真正的资产","如何迈出理财第一步"]),
+
+  mkBook("38","穷查理宝典","查理·芒格","https://img2.doubanio.com/view/subject/l/public/s29468881.jpg","中信出版社","2016-08","9787508663326",352,
+    "查理·芒格是巴菲特最重要的合伙人。本书收录了芒格的演讲、文章和投资哲学，展示了他独特的「多元思维模型」和「逆向思维」方法。",
+    "商业财经",8.6,28000,
+    ["想学习顶级投资大师的思维方式","想了解巴菲特搭档的智慧","想建立多元思维模型提升决策能力","想读一本既有深度又幽默的投资书"],
+    ["查理·芒格唯一授权传记式作品","巴菲特亲自作序推荐","多元思维模型：用各学科的知识解决投资问题","「反过来想，总是反过来想」——逆向思维经典"],
+    ["投资大师到底是怎么思考的","如何避免投资中的愚蠢决策","什么是多元思维模型","普通人如何学习投资"]),
+
+  mkBook("39","小狗钱钱","博多·舍费尔","https://img2.doubanio.com/view/subject/l/public/s34333831.jpg","中信出版社","2021-01","9787521720587",208,
+    "一本写给孩子的理财启蒙书，但成人的收获更大。通过一只会说话的小狗「钱钱」的引导，小女孩吉娅学会了理财，也学会了如何实现梦想。",
+    "商业财经",9.0,18500,
+    ["想给孩子的财商启蒙","自己也想学习理财但害怕太复杂","想找一本轻松有趣的理财入门书","想学会如何设定财务目标"],
+    ["豆瓣9.0分，最受欢迎的理财入门书","用童话故事讲理财，完全没有阅读门槛","「梦想储蓄罐」「成功日记」等方法简单实用","适合大人和孩子一起读"],
+    ["理财太难了不知道怎么入门","如何给孩子进行财商教育","什么是财务自由的第一步","没钱怎么理财"]),
+
+  mkBook("40","置身事内","兰小欢","https://img2.doubanio.com/view/subject/l/public/s34047682.jpg","上海人民出版社","2021-08","9787208171336",340,
+    "本书以地方政府投融资为主线，探讨了中国经济发展中的关键问题：分税制改革、土地财政、城投公司、招商引资等，帮助读者理解中国经济运行的底层逻辑。",
+    "商业财经",9.1,42000,
+    ["想理解中国经济的真实运作方式","对房价、地方债等问题感到困惑","想了解政府和市场的关系","需要一本既专业又易懂的经济学读物"],
+    ["豆瓣9.1分，年度最受欢迎经济类图书","兰小欢是复旦大学经济学教授，专业权威","用通俗语言讲透中国经济的底层逻辑","覆盖房价、地方债、招商引资等热点话题"],
+    ["中国房价为什么这么高","地方债危机会爆发吗","政府在经济中扮演什么角色","普通人如何理解宏观经济"]),
+
+  mkBook("41","从0到1","彼得·蒂尔","https://img2.doubanio.com/view/subject/l/public/s28042433.jpg","中信出版社","2015-01","9787508649719",260,
+    "PayPal创始人彼得·蒂尔讲述了如何创建一家成功的创业公司。他认为，真正的创新是从0到1创造全新的事物，而不是从1到N复制已有的模式。",
+    "商业财经",7.6,18600,
+    ["想创业但不知道从何入手","想了解硅谷顶级创业者的思维","想找到自己的差异化竞争优势","想学习如何从0到1创造价值"],
+    ["PayPal创始人、硅谷投资教父彼得·蒂尔力作","「从0到1」已成为创业圈的经典概念","揭示了垄断才是好生意的本质","每个创业者都应该读的书"],
+    ["创业的方向在哪里","如何找到竞争对手看不到的机会","什么样的商业模式是好的","如何从0到1创造新事物"]),
+
+  // ===== 历史人文 (8本) =====
+  mkBook("6","人类简史","尤瓦尔·赫拉利","https://img2.doubanio.com/view/subject/l/public/s27814883.jpg","中信出版社","2014-11","9787508647357",440,
+    "从认知革命、农业革命到科学革命，我们是如何登上世界舞台成为万物之灵的？这本书将带你从全新的视角审视人类的历史和未来。",
+    "历史人文",9.1,197000,
+    ["想了解人类文明的宏大叙事但觉得历史太枯燥","对人类的未来发展充满好奇和担忧","想提升认知格局拓宽思维边界","朋友推荐被称为「刷新三观」的神作"],
+    ["全球销量超2500万册，被翻译成65种语言","豆瓣9.1分，近20万人评价，历史类天花板","比尔·盖茨、扎克伯格、奥巴马倾力推荐","从7万年前认知革命到AI时代，宏大叙事一气呵成"],
+    ["为什么人类会统治地球","我们真的比采集狩猎时代更幸福吗","金钱帝国宗教的本质是什么","人类未来将走向何方"]),
+
+  mkBook("9","明朝那些事儿","当年明月","https://img2.doubanio.com/view/subject/l/public/s28437473.jpg","浙江人民出版社","2011-11","9787213046766",358,
+    "以史料为基础，以年代和具体人物为主线，加入了小说的笔法，对明朝十七帝和其他王公权贵小人物的命运进行全景展示。",
+    "历史人文",9.1,156000,
+    ["对历史感兴趣但觉得正史太枯燥","想找一本有趣又有料的历史入门书","被朋友强烈安利说「看了就停不下来」","想了解明朝那些有趣的人物和故事"],
+    ["豆瓣9.1分，15.6万人评价，中国历史通俗读物天花板","网络连载时代现象级神作，销量超千万册","用小说的笔法写历史，比电视剧还精彩","王阳明、张居正、海瑞、戚继光……300年群星闪耀"],
+    ["历史书太枯燥读两页就想睡觉","想了解中国历史但不知道从哪开始","教科书上的历史人物太扁平","上下班路上想看点有趣又有收获的内容"]),
+
+  mkBook("42","枪炮、病菌与钢铁","贾雷德·戴蒙德","https://img2.doubanio.com/view/subject/l/public/s29638693.jpg","中信出版社","2016-07","9787508647326",464,
+    "为什么是欧亚大陆人征服了美洲，而不是反过来？作者从地理、生物、技术等角度，解释了不同大陆人类社会发展差异的根源。",
+    "历史人文",8.8,32000,
+    ["对人类文明发展差异感到好奇","想了解为什么西方率先崛起","想从宏观角度理解人类历史","喜欢跨学科思考"],
+    ["普利策奖获奖作品，人类学经典","揭示了地理环境对文明发展的决定性影响","回答了一个困扰人类几百年的问题","比尔·盖茨、查理·芒格强烈推荐"],
+    ["为什么是欧洲殖民了美洲而不是反过来","地理环境到底有多重要","文明发展的根本动力是什么","为什么有些文明落后了"]),
+
+  mkBook("43","万历十五年","黄仁宇","https://img2.doubanio.com/view/subject/l/public/s1108616.jpg","生活·读书·新知三联书店","1997-05","9787108009821",286,
+    "以1587年为切入点，通过对万历皇帝、张居正、海瑞、戚继光等关键人物的分析，揭示了中国传统社会管理层面存在的深层次问题。",
+    "历史人文",8.9,52000,
+    ["想了解明朝历史的深层逻辑","对「大历史观」感兴趣","想了解中国为何没有自发走向现代化","被《人民的名义》种草想读原书"],
+    ["豆瓣8.9分，史学经典，经久不衰","黄仁宇「大历史观」的代表作","《人民的名义》中高育良反复提及","深入浅出，从一年看透一个朝代"],
+    ["明朝为什么灭亡","中国为什么没有走向资本主义","历史的必然性是什么","如何从微观事件看宏观趋势"]),
+
+  mkBook("44","未来简史","尤瓦尔·赫拉利","https://img2.doubanio.com/view/subject/l/public/s29007043.jpg","中信出版社","2017-02","9787508672069",416,
+    "从《人类简史》的过去，转向《未来简史》的未来。当大数据和人工智能比你自己更了解你时，自由意志还存在吗？人类将何去何从？",
+    "历史人文",8.4,28000,
+    ["读完《人类简史》想知道未来会怎样","对AI和技术发展对人类的影响感到好奇","想了解数据主义和新宗教","喜欢宏大叙事和未来主义"],
+    ["《人类简史》作者赫拉利又一力作","从过去到未来，构建完整的人类叙事","对AI、大数据、生物技术的深刻洞察","「数据主义」概念引发全球讨论"],
+    ["AI会取代人类吗","自由意志真的存在吗","未来的社会会是什么样子","人类会被自己创造的技术淘汰吗"]),
+
+  mkBook("45","苦难辉煌","金一南","https://img2.doubanio.com/view/subject/l/public/s28042434.jpg","华艺出版社","2009-01","9787802521483",494,
+    "讲述了20世纪中国从苦难走向辉煌的历程。作者以宏大的视野，再现了中国共产党领导人民进行革命战争的波澜壮阔的历史画卷。",
+    "历史人文",8.5,15000,
+    ["想了解中国近现代史的真实面貌","对党史和革命史感兴趣","想了解中国共产党为什么能成功","需要一本有深度且可读性强的历史书"],
+    ["中宣部推荐读物，权威历史著作","金一南将军力作，视野宏大","披露了大量鲜为人知的历史细节","豆瓣8.5分，好评如潮"],
+    ["中国共产党为什么能成功","中国的苦难辉煌是怎么走过来的","历史教科书之外的真实历史","革命先辈的精神遗产是什么"]),
+
+  mkBook("46","全球通史","斯塔夫里阿诺斯","https://img2.doubanio.com/view/subject/l/public/s1108617.jpg","北京大学出版社","2006-10","9787301109489",833,
+    "当代世界史编纂的经典之作，以全球视野审视人类历史，从史前文明到21世纪，跨越各大洲，展现了人类文明从分散到整体的发展过程。",
+    "历史人文",9.1,18000,
+    ["想系统了解世界历史","想找一本权威的世界史入门书","想从全球视角理解文明发展","需要一本可以作为参考书的历史经典"],
+    ["豆瓣9.1分，全球最受欢迎的世界史教材","被翻译成20多种语言","全球视野，不局限于西方中心主义","内容全面，涵盖了各大文明的兴衰"],
+    ["世界史从哪里开始读","如何建立全球视野","为什么需要了解世界历史","文明兴衰的规律是什么"]),
+
+  // ===== 职场技能 (6本) =====
+  mkBook("10","金字塔原理","芭芭拉·明托","https://img2.doubanio.com/view/subject/l/public/s28382893.jpg","南海出版公司","2013-11","9787544268882",304,
+    "麦肯锡40年经典培训教材，介绍了金字塔原理在写作、思考、解决问题和演示中的运用。",
+    "职场技能",8.0,18600,
+    ["写报告做汇报总是逻辑混乱说不清楚","想提升职场竞争力学习顶级咨询公司的思维方法","汇报时领导总说「说重点」","想系统提升逻辑思维和表达能力"],
+    ["麦肯锡40年经典培训教材，全球咨询顾问的必修课","金字塔原理已被全球500强企业广泛采用","从思考到表达到演示，构建完整的逻辑体系","适用于写作、汇报、演讲、解决问题等所有职场场景"],
+    ["写了一大堆材料领导却说没重点","和同事沟通时总是鸡同鸭讲","做PPT不知从何下手","想问题总是想不清楚"]),
+
+  mkBook("47","关键对话","科里·帕特森","https://img2.doubanio.com/view/subject/l/public/s28382895.jpg","机械工业出版社","2017-05","9787111559498",224,
+    "当结果充满风险、观点背道而驰、情绪激烈时，普通的对话便会升级为「关键对话」。本书教你在关键时刻，如何进行高质量的沟通。",
+    "职场技能",8.1,15000,
+    ["在重要谈话时总是紧张说不好","和领导同事有冲突不知道怎么沟通","想提升沟通和谈判能力","面对高难度对话时总是逃避"],
+    ["全球畅销超500万册，职场沟通圣经","提供了「STATE」等具体可操作的沟通模型","适用于职场、家庭、任何人际关系场景","不是鸡汤，是经过验证的沟通方法"],
+    ["为什么重要谈话总是搞砸","如何和领导进行高难度对话","面对冲突如何保持冷静","为什么我总是不敢表达真实想法"]),
+
+  mkBook("48","学会提问","尼尔·布朗","https://img2.doubanio.com/view/subject/l/public/s28382896.jpg","机械工业出版社","2013-01","9787111406594",288,
+    "在信息爆炸的时代，学会提出正确的问题，比找到答案更重要。本书教你如何培养批判性思维，识别逻辑谬误，做出更明智的判断。",
+    "职场技能",8.4,12500,
+    ["总是被各种信息带偏无法独立思考","想提升批判性思维能力","在职场中不会提问显得很被动","想学会辨别真伪不被忽悠"],
+    ["批判性思维经典教材，全球大学广泛采用","教你识别常见的逻辑谬误和认知偏误","在信息时代保持独立思考的必备能力","已经被翻译成10多种语言"],
+    ["为什么我总被别人的观点带跑","如何辨别信息的真伪","批判性思维可以培养吗","如何提出好问题"]),
+
+  mkBook("49","OKR工作法","克里斯蒂娜·沃特克","https://img2.doubanio.com/view/subject/l/public/s28382897.jpg","中信出版社","2017-09","9787508676203",208,
+    "OKR（Objectives and Key Results）是谷歌、英特尔等公司使用的目标管理方法。本书教你如何用OKR帮助团队聚焦目标、高效协作。",
+    "职场技能",7.8,9800,
+    ["团队目标不清晰效率低下","想学习谷歌等顶级公司的管理方法","需要一套具体可执行的目标管理工具","想提升团队的执行力"],
+    ["谷歌、英特尔、LinkedIn都在用的管理方法","简单易懂，半天就能读完并开始实践","提供了具体的OKR制定模板和案例","适用于任何规模的团队"],
+    ["团队目标为什么总是完不成","KPI和OKR有什么区别","如何让团队成员目标一致","为什么目标管理这么难"]),
+
+  mkBook("50","深度工作","卡尔·纽波特","https://img2.doubanio.com/view/subject/l/public/s28382898.jpg","江西人民出版社","2017-07","9787210092520",256,
+    "在信息碎片化的时代，深度工作正在成为一种稀缺能力。本书教你如何训练专注力，在更短的时间内创造更高的价值。",
+    "职场技能",8.0,14200,
+    ["工作时总是被各种消息打断","想提高工作效率但找不到方法","感觉自己的专注力越来越差","想学会如何在碎片化时代保持深度思考"],
+    ["「深度工作」概念已被全球职场人广泛认可","提供了四种深度工作哲学，总有一款适合你","基于大量研究和案例，不是空谈","已被翻译成30多种语言"],
+    ["为什么我总是无法专注","如何摆脱手机的干扰","深度工作和浅度工作的区别","如何保护自己的专注时间"]),
 ];

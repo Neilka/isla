@@ -106,11 +106,16 @@ export const useBookStore = create<BookStore>((set, get) => ({
     try {
       const res = await fetch(`/api/books/search?q=${encodeURIComponent(q)}`);
       const json = await res.json();
+      console.log('[BookStore] search response:', json);
       if (json.success) {
-        set({ searchResults: json.data.books, searchLoading: false });
+        set({ searchResults: json.data.books || [], searchLoading: false });
+      } else {
+        console.error('[BookStore] search failed:', json);
+        set({ searchResults: [], searchLoading: false });
       }
-    } catch {
-      set({ searchLoading: false });
+    } catch (e) {
+      console.error('[BookStore] search error:', e);
+      set({ searchResults: [], searchLoading: false });
     }
   },
 
