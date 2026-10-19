@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>今日读书卡片 · 第 3 周第 7 天</title>
+<style>
+:root {
+  color-scheme: light;
+  --surface: #F7F7F8;
+  --surface-muted: #EFEFF2;
+  --text: #171717;
+  --text-muted: #52525B;
+  --border: rgba(23, 23, 23, 0.12);
+  --brand: #0FDC78;
+  --brand-soft: #E5FFF2;
+  --brand-text: #004D26;
+  --radius: 8px;
+  --radius-card: 12px;
+  --radius-full: 999px;
+  --spacer-4: 4px;
+  --spacer-8: 8px;
+  --spacer-12: 12px;
+  --spacer-16: 16px;
+  --spacer-20: 20px;
+  --spacer-24: 24px;
+  --font-sans: "SF Pro Text", "PingFang SC", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-strong: 600;
+  --text-caption: 12px/18px;
+  --text-body: 14px/20px;
+  --text-title: 16px/24px;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  padding: 24px 16px;
+  background: var(--surface);
+  font-family: var(--font-sans);
+  display: grid;
+  justify-content: center;
+}
+.rc {
+  color: var(--text);
+  font: var(--weight-regular) var(--text-body) var(--font-sans);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: var(--spacer-20);
+  display: grid;
+  gap: var(--spacer-16);
+  max-width: 720px;
+  width: 100%;
+}
+.rc-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--spacer-12);
+  flex-wrap: wrap;
+}
+.rc-title {
+  font: var(--weight-medium) var(--text-title) var(--font-sans);
+  margin: 0;
+  color: var(--text);
+}
+.rc-date {
+  font: var(--weight-regular) var(--text-caption) var(--font-sans);
+  color: var(--text-muted);
+  margin-top: var(--spacer-4);
+}
+.badges {
+  display: flex;
+  gap: var(--spacer-8);
+  flex-wrap: wrap;
+}
+.badge {
+  font: var(--weight-medium) var(--text-caption) var(--font-sans);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  padding: 2px var(--spacer-8);
+}
+.badge-focus {
+  color: var(--brand-text);
+  border-color: var(--brand);
+  background: var(--brand-soft);
+}
+.progress {
+  display: grid;
+  gap: var(--spacer-4);
+}
+.progress-track {
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: var(--brand);
+}
+.progress-meta {
+  font: var(--weight-regular) var(--text-caption) var(--font-sans);
+  color: var(--text-muted);
+}
+.book {
+  background: var(--surface-muted);
+  border: 1px solid var(--brand);
+  border-radius: var(--radius-card);
+  padding: var(--spacer-12);
+  display: grid;
+  gap: var(--spacer-4);
+}
+.book-tag {
+  font: var(--weight-medium) var(--text-caption) var(--font-sans);
+  color: var(--brand-text);
+}
+.book-title {
+  font: var(--weight-medium) var(--text-title) var(--font-sans);
+  color: var(--text);
+}
+.book-sub {
+  font: var(--weight-regular) var(--text-caption) var(--font-sans);
+  color: var(--text-muted);
+}
+.sec {
+  display: grid;
+  gap: var(--spacer-8);
+}
+.lbl {
+  font: var(--weight-medium) var(--text-caption) var(--font-sans);
+  color: var(--text-muted);
+}
+.body {
+  font: var(--weight-regular) var(--text-body) var(--font-sans);
+  color: var(--text);
+}
+.lst {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--spacer-8);
+}
+.lst li {
+  display: flex;
+  gap: var(--spacer-8);
+  font: var(--weight-regular) var(--text-body) var(--font-sans);
+  color: var(--text);
+}
+.lst li::before {
+  content: "·";
+  color: var(--text-muted);
+}
+.lst b {
+  font-weight: var(--weight-medium);
+}
+.chip {
+  font: var(--weight-medium) var(--text-caption) var(--font-sans);
+  color: var(--brand-text);
+  background: var(--brand-soft);
+  border: 1px solid var(--brand);
+  border-radius: var(--radius-full);
+  padding: 2px var(--spacer-8);
+  justify-self: start;
+}
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacer-16);
+}
+.wr {
+  display: grid;
+  gap: var(--spacer-12);
+  border-top: 1px solid var(--border);
+  padding-top: var(--spacer-16);
+}
+.wr-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacer-8);
+  flex-wrap: wrap;
+}
+.wr-title {
+  font: var(--weight-medium) var(--text-title) var(--font-sans);
+  color: var(--text);
+}
+.sec-inline {
+  display: grid;
+  gap: var(--spacer-4);
+}
+.foot {
+  border-top: 1px solid var(--border);
+  padding-top: var(--spacer-12);
+  font: var(--weight-regular) var(--text-caption) var(--font-sans);
+  color: var(--text-muted);
+}
+@media (max-width: 560px) {
+  .grid2 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="rc">
+  <div class="rc-head">
+    <div>
+      <div class="rc-title">今日读书卡片</div>
+      <div class="rc-date">2026年10月19日 · 星期一</div>
+    </div>
+    <div class="badges">
+      <span class="badge badge-focus">第 3 周 · 第 7 天</span>
+      <span class="badge">Phase 1 · 入门期（第 1–17 周）</span>
+    </div>
+  </div>
+  <div class="progress">
+    <div class="progress-track"><div class="progress-fill" style="width: 100%"></div></div>
+    <div class="progress-meta">周内进度 7 / 7 · 本周主题：心理学 + 经济学 · 总进度 21 / 364 天（5.8%）</div>
+  </div>
+  <div class="book">
+    <div class="book-tag">今日 · 复盘日（D7）</div>
+    <div class="book-title">第 3 周 复盘 · 心理学 + 经济学</div>
+    <div class="book-sub">周一（D7）· 本周无新书，完成周复盘与下周衔接</div>
+  </div>
+  <div class="sec">
+    <div class="lbl">今日任务</div>
+    <ul class="lst">
+      <li>复读四本书的章末笔记与勾画，各用一句话提炼核心结论</li>
+      <li>完成下方《复盘清单》（7 项）并归档本周笔记</li>
+      <li>浏览第 4 周课程表，预习首本原典的目录结构</li>
+    </ul>
+  </div>
+  <div class="sec">
+    <div class="lbl">预计花费时长</div>
+    <div class="body">复盘约 1.5–2 小时（本周总时长 10h，含 4 个书目槽位 + 复盘日）；中国文史轨道另加 20–30 分钟</div>
+  </div>
+  <div class="sec">
+    <div class="lbl">阅读重点（本周四书核心结论）</div>
+    <ul class="lst">
+      <li><b>詹姆斯《心理学原理》第 1 章：</b>心理学是"关于意识的自然科学"；心理生活是连续的"意识流"（stream of consciousness），研究其状态与习惯</li>
+      <li><b>卡尼曼《快思慢想》第 1 部：</b>两套系统——系统 1 快速直觉、系统 2 缓慢审慎；大多数判断由系统 1 先发，系统 2 往往偷懒认可</li>
+      <li><b>弗里德曼《资本主义与自由》第 1–3 章：</b>经济自由与政治自由互为条件；政府职能应限于自由交换无法覆盖的领域；货币控制是政府核心职责之一</li>
+      <li><b>张夏准《踢开梯子》第 1–3 章：</b>发达国家当年靠保护主义与产业政策起家，成功后却向后发国家推销自由贸易——"踢开梯子"揭示发展政策的双重标准</li>
+    </ul>
+  </div>
+  <div class="sec">
+    <div class="lbl">笔记要点</div>
+    <ul class="lst">
+      <li><b>今日思考题：</b>心理学说"直觉不可靠"（系统 1），经济学说"市场协调无数个体的自发行为"——两者对人的理性给出相反假设，如何调和？</li>
+      <li><b>原典↔二手对比：</b>詹姆斯"意识流" vs 卡尼曼"双系统"——从意识的连续流到启发式判断，心理学百年追问的演进</li>
+      <li><b>跨学科联想：</b>弗里德曼的规范叙事 vs 张夏准的历史叙事——同一段富国政策史支撑相反政策结论，正是第 2 周"历史是建构的"的活例</li>
+      <li><b>我的判断：</b>用一句话分别写出四本书各自想"劝你相信什么"，并标注自己信与不信的部分</li>
+    </ul>
+  </div>
+  <div class="grid2">
+    <div class="sec">
+      <div class="lbl">中国文史轨道</div>
+      <div class="body">阶段：先秦经典 · 五经与诸子（第 1–13 周）</div>
+      <div class="body">今日：复盘日，滚动补读本周错过的轨道选篇，随五经通览顺序接续</div>
+      <div class="chip">建议 20–30 分钟 · 周三为轨道深读日</div>
+    </div>
+    <div class="sec">
+      <div class="lbl">配套课程提示</div>
+      <div class="body">配合本周心理学 + 经济学，各对应通识课程 1–2 讲（具体课程以执行计划配套 B 站课程表为准）</div>
+    </div>
+  </div>
+  <div class="wr">
+    <div class="wr-head">
+      <span class="wr-title">本周周报 · 第 3 周</span>
+      <span class="badge badge-focus">周一 · 复盘</span>
+    </div>
+    <div class="sec-inline">
+      <div class="lbl">本周覆盖</div>
+      <div class="body">心理学（詹姆斯 + 卡尼曼）· 经济学（弗里德曼 + 张夏准）</div>
+    </div>
+    <div class="sec-inline">
+      <div class="lbl">各书核心结论</div>
+      <ul class="lst">
+        <li><b>詹姆斯《心理学原理》第 1 章：</b>意识是流动的、连续的，心理学应研究意识的"状态"与"流"，而非拆成孤立的元素</li>
+        <li><b>卡尼曼《快思慢想》第 1 部：</b>人依赖两套系统：快而常错（直觉），慢而可靠（审慎）；多数决策由系统 1 主导</li>
+        <li><b>弗里德曼《资本主义与自由》第 1–3 章：</b>自由市场是政治自由的前提；政府角色应最小化，专司规则、秩序与货币</li>
+        <li><b>张夏准《踢开梯子》第 1–3 章：</b>"正统"经济学叙事掩盖了富国真实的发展史——保护与干预是常态，自由贸易是特权者的说辞</li>
+      </ul>
+    </div>
+    <div class="sec-inline">
+      <div class="lbl">跨学科关联点</div>
+      <div class="body">认知科学揭示个体判断的系统性偏差，经济学却要协调这些"不完美的人"；规范叙事（弗里德曼）与历史叙事（张夏准）的分歧，呼应"历史是建构的"——本周总结问题：当我们知道直觉会骗人、历史会被书写，"自由市场"与"产业政策"之争该如何下判断？</div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="lbl">复盘清单</div>
+    <ul class="lst">
+      <li>四本书的必读章节是否都已完成精读？</li>
+      <li>每本书的"一句话核心结论"是否写入笔记？</li>
+      <li>原典 ↔ 二手是否各做了对比（4 组）？</li>
+      <li>本周跨学科关联点是否记录并附上自己的例子？</li>
+      <li>中国文史轨道本周选篇是否补读 / 跟进？</li>
+      <li>配套课程是否看完对应讲次？</li>
+      <li>是否确认第 4 周书目并归档本周笔记？</li>
+    </ul>
+  </div>
+  <div class="wr">
+    <div class="wr-head">
+      <span class="wr-title">下周预告 · 第 4 周</span>
+      <span class="badge">书目以执行计划第 4 周课程表为准</span>
+    </div>
+    <div class="sec-inline">
+      <div class="lbl">固定节奏</div>
+      <div class="body">D1 学科 A 原典 → D2 学科 A 二手 → D3 学科 B 原典 → D4 学科 B 二手 → D5–D6 轨道深读与机动 → D7 复盘</div>
+    </div>
+    <div class="sec-inline">
+      <div class="lbl">本周（第 4 周）书目槽位</div>
+      <ul class="lst">
+        <li>周二（D1）· 学科 A 原典 — 以计划文档第 4 周课程表为准</li>
+        <li>周三（D2）· 学科 A 二手 — 以计划文档第 4 周课程表为准</li>
+        <li>周四（D3）· 学科 B 原典 — 以计划文档第 4 周课程表为准</li>
+        <li>周五（D4）· 学科 B 二手 — 以计划文档第 4 周课程表为准</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot">人文社科 52 周阅读计划 · 每日读书卡片 · 总第 21 / 364 天（本卡片基于现有资料重建，细节以执行计划文档为准）</div>
+</div>
+</body>
+</html>
